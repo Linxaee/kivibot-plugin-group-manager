@@ -1,38 +1,38 @@
 {
-	"name": "kivibot-plugin-group-manager",
-	"version": "1.2.0",
-	"private": false,
-	"description": "QQ 机器人框架 KiviBot 的群管插件",
-	"main": "lib/index.js",
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/Linxaee/kivibot-plugin-group-manager"
-	},
-	"homepage": "",
-	"author": "Linxae (https://github.com/Linxaee)",
-	"scripts": {
-		"dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
-		"build": "tsc && tsc-alias",
-		"test": "ava",
-		"clean": "rimraf lib",
-		"release": "npm run clean && npm run build && npm publish"
-	},
-	"files": [
-		"lib"
-	],
-	"keywords": [
-		"kivibot",
-		"kivibot-plugin"
-	],
-	"license": "MIT",
-	"devDependencies": {
-		"@kivibot/core": "latest",
-		"@types/node": "^18.11.13",
-		"ava": "^5.1.0",
-		"concurrently": "^7.6.0",
-		"rimraf": "^3.0.2",
-		"tsc-alias": "^1.8.1",
-		"typescript": "^4.9.3"
-	}
+    "name": "kivibot-plugin-group-manager",
+    "version": "1.2.1",
+    "private": false,
+    "description": "QQ 机器人框架 KiviBot 的群管插件",
+    "main": "lib/index.js",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/Linxaee/kivibot-plugin-group-manager"
+    },
+    "homepage": "",
+    "author": "Linxae (https://github.com/Linxaee)",
+    "scripts": {
+        "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
+        "build": "tsc && tsc-alias",
+        "test": "ava",
+        "clean": "rimraf lib",
+        "release": "npm run clean && npm run build && npm publish"
+    },
+    "files": [
+        "lib"
+    ],
+    "keywords": [
+        "kivibot",
+        "kivibot-plugin"
+    ],
+    "license": "MIT",
+    "devDependencies": {
+        "@kivibot/core": "latest",
+        "@types/node": "^18.11.13",
+        "ava": "^5.1.0",
+        "concurrently": "^7.6.0",
+        "rimraf": "^3.0.2",
+        "tsc-alias": "^1.8.1",
+        "typescript": "^4.9.3"
+    }
 }
 
