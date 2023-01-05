@@ -1,4 +1,5 @@
-import { GroupEventHandler } from "../types";
+import type { GroupEventHandler } from "../types";
+import type { ModuleConfig } from "../../config";
 import { selfNoAuthMsg, roleAuth, validateTitle } from "../../utils";
 export const selfTitleHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
@@ -6,7 +7,7 @@ export const selfTitleHandler: GroupEventHandler = async (e, plugin, config, arg
     // 获取群对象
     const group = e.group;
     // 是否开启自行申请
-    const { enableSelf } = config.titleConfig;
+    const { enableSelf } = config.titleConfig as ModuleConfig;
     // bot若不是管理或群主则发送
     if (!roleAuth.selfIsGroupOwner(group)) return e.reply(selfNoAuthMsg + "设置头衔需将bot设置为群主");
     // 判断是否开启自己申请

@@ -1,4 +1,5 @@
 import type { GroupEventHandler } from "../types";
+import type { ModuleConfig } from "../../config";
 import { selfNoAuthMsg, roleAuth, validateUid, handleAt, validateNumber, formatSeconds, ifSelf } from "../../utils";
 import { randomInt } from "@kivibot/core";
 export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
@@ -6,7 +7,7 @@ export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, 
     const sender_id = e.sender.user_id;
     // 获取群对象
     const group = e.group;
-    const { permissionList, enableAt } = config.muteConfig;
+    const { permissionList, enableAt } = config.muteConfig as ModuleConfig;
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // bot若不是管理员或群主则发送

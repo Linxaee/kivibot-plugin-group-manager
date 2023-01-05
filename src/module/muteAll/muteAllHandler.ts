@@ -1,11 +1,12 @@
 import type { GroupEventHandler } from "../types";
+import type { ModuleConfig } from "../../config";
 import { selfNoAuthMsg, roleAuth } from "../../utils";
 export const muteAllHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
     const sender_id = e.sender.user_id;
     // 获取群对象
     const group = e.group;
-    const { permissionList } = config.muteAllConfig;
+    const { permissionList } = config.muteAllConfig as ModuleConfig;
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // bot若不是管理员或群主则发送
