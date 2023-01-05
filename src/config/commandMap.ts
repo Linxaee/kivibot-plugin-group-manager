@@ -4,29 +4,29 @@ import { adminHandler } from "../handler/adminHandler";
 import { titleHandler } from "../handler/titleHandler";
 
 export const commandMap = new Map<string, GroupEventHandler>([
-	[
-		"muteall",
-		(e, group, bot, plugin, config) => {
-			muteAllHandler(e, group, bot, plugin, config, true);
-		},
-	],
-	[
-		"demuteall",
-		(e, group, bot, plugin, config) => {
-			muteAllHandler(e, group, bot, plugin, config, false);
-		},
-	],
-	[
-		"setadmin",
-		(e, group, bot, plugin, config) => {
-			adminHandler(e, group, bot, plugin, config, true);
-		},
-	],
-	[
-		"deadmin",
-		(e, group, bot, plugin, config) => {
-			adminHandler(e, group, bot, plugin, config, false);
-		},
-	],
-	["settitle", titleHandler],
+    [
+        "all",
+        (e, plugin, config, argMsg) => {
+            muteAllHandler(e, plugin, config, argMsg, true);
+        },
+    ],
+    [
+        "deall",
+        (e, plugin, config, argMsg) => {
+            muteAllHandler(e, plugin, config, argMsg, false);
+        },
+    ],
+    [
+        "管理+",
+        (e, plugin, config, argMsg) => {
+            adminHandler(e, plugin, config, argMsg, true);
+        },
+    ],
+    [
+        "管理-",
+        (e, plugin, config, argMsg) => {
+            adminHandler(e, plugin, config, argMsg, false);
+        },
+    ],
+    ["头衔", titleHandler],
 ]);
