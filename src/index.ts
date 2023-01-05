@@ -1,6 +1,6 @@
 import { KiviPlugin, segment, makeForwardMsg, GroupMessageEvent } from "@kivibot/core";
 import { config, commandMap } from "./config";
-import { adminCmdHandler } from "./handler/adminCmdHandler";
+import { adminCmdHandler } from "./handler/adminCmd/adminCmdHandler";
 //@ts-ignore
 const { version } = require("../package.json");
 

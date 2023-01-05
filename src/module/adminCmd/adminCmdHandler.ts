@@ -1,7 +1,7 @@
 import type { GroupRole } from "@kivibot/core";
-import type { BotAdminCmdHandler } from "./types";
-import type { ModuleConfig } from "../config";
-import { roleList } from "../config";
+import type { BotAdminCmdHandler } from "../types";
+import type { ModuleConfig } from "../../config";
+import { roleList } from "../../config";
 export const adminCmdHandler: BotAdminCmdHandler = async (e, param, plugin, config) => {
     const [module, key, value] = param;
 
@@ -43,6 +43,23 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, param, plugin, conf
         return e.reply("已修改功能触发前缀", true);
     }
 
+    // 模块配置查看
+    if (module && key === "dt") {
+        // 获取对应模块的权限组
+        let curModule = (config as any)[`${module}Config`] as ModuleConfig;
+        if (curModule) {
+            return e.reply(
+                `当前模块配置为:\n${JSON.stringify(
+                    curModule,
+                    null,
+                    "\t"
+                )}\n字段具体含义请自行查阅插件官网说明文档:\nhttps://github.com/Linxaee/kivibot-plugin-group-manager/blob/master/README.md`,
+                true
+            );
+        } else {
+            return e.reply(`不存在模块${module},请检查输入`, true);
+        }
+    }
     // 模块权限组查看
     if (module && key === "list") {
         // 获取对应模块的权限组
@@ -98,6 +115,7 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, param, plugin, conf
             return e.reply(`不存在模块${module},请检查输入`, true);
         }
     }
+
     // 启用at功能
     if (module && key === "at" && value) {
         // 获取对应模块

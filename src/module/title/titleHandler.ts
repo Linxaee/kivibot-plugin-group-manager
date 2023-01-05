@@ -1,5 +1,5 @@
-import { GroupEventHandler } from "./types";
-import { selfNoAuthMsg, roleAuth, validateUid, handleAt } from "../utils";
+import { GroupEventHandler } from "../types";
+import { selfNoAuthMsg, roleAuth, validateUid, handleAt, validateTitle } from "../../utils";
 export const titleHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
     const sender_id = e.sender.user_id;
@@ -10,7 +10,7 @@ export const titleHandler: GroupEventHandler = async (e, plugin, config, argMsg,
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // bot若不是管理或群主则发送
-    if (!roleAuth.selfIsGroupOwner(group)) return e.reply(selfNoAuthMsg);
+    if (!roleAuth.selfIsGroupOwner(group)) return e.reply(selfNoAuthMsg + "设置头衔需将bot设置为群主");
     else {
         // uid
         let uid: number | string | undefined = undefined;
@@ -39,8 +39,7 @@ export const titleHandler: GroupEventHandler = async (e, plugin, config, argMsg,
                     else return e.reply(`未能清空 ${uid} 的头衔`);
                 }
                 // 获取待设置头衔的字符长度
-                let titleLen = title.replace(/[^x00-xff]/g, "AA").length;
-                if (titleLen > 12) return e.reply(`头衔大于12个字符,请重新设置`);
+                if (!validateTitle(title)) return e.reply(`头衔大于12个字符,请重新设置`);
                 // 校验通过,设置头衔
                 const flag = await group.setTitle(uid, title);
                 if (flag) return e.reply(`已将 ${uid}(${nickname}) 的头衔设置为 ${title}`);

@@ -1,5 +1,5 @@
-import type { GroupEventHandler } from "./types";
-import { selfNoAuthMsg, roleAuth, validateUid, handleAt, validateNumber, formatSeconds, ifSelf } from "../utils";
+import type { GroupEventHandler } from "../types";
+import { selfNoAuthMsg, roleAuth, validateUid, handleAt, validateNumber, formatSeconds, ifSelf } from "../../utils";
 import { randomInt } from "@kivibot/core";
 export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
