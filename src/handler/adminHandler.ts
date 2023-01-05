@@ -62,3 +62,4 @@ export const adminHandler: GroupEventHandler = async (e, plugin, config, argMsg,
         }
     }
 };
+

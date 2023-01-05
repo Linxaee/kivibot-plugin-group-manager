@@ -15,6 +15,10 @@ export const config: GroupManagerConfig = {
         permissionList: ["admin", "owner"],
         enableAt: true,
     },
+    muteConfig: {
+        permissionList: ["admin", "owner"],
+        enableAt: true,
+    },
 };
 
 export interface GroupManagerConfig {
@@ -25,6 +29,7 @@ export interface GroupManagerConfig {
     muteAllConfig: ModuleConfig;
     adminConfig: ModuleConfig;
     titleConfig: ModuleConfig;
+    muteConfig: ModuleConfig;
 }
 export interface ModuleConfig {
     // 使用权限集

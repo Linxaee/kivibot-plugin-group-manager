@@ -46,8 +46,6 @@ export const titleHandler: GroupEventHandler = async (e, plugin, config, argMsg,
                 if (flag) return e.reply(`已将 ${uid}(${nickname}) 的头衔设置为 ${title}`);
                 else return e.reply(`未能设置 ${uid} 的头衔,请检查头衔长度`);
             } catch (err) {
-                console.log(err);
-
                 return e.reply(`本群不存在成员 ${uid}`);
             }
         } else {

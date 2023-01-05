@@ -1,6 +1,6 @@
 {
 	"name": "kivibot-plugin-group-manager",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"private": false,
 	"description": "QQ 机器人框架 KiviBot 的群管插件",
 	"main": "lib/index.js",

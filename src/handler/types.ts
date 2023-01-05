@@ -4,7 +4,9 @@ export type GroupEventHandler = (
     e: GroupMessageEvent,
     plugin: KiviPlugin,
     config: GroupManagerConfig,
+    // 指令后的参数消息
     argMsg: string,
+    // 额外参数
     params?: any
 ) => void;
 

@@ -2,7 +2,7 @@ import type { GroupEventHandler } from "../handler/types";
 import { muteAllHandler } from "../handler/muteAllHandler";
 import { adminHandler } from "../handler/adminHandler";
 import { titleHandler } from "../handler/titleHandler";
-
+import { muteHandler } from "../handler/muteHandler";
 export const commandMap = new Map<string, GroupEventHandler>([
     [
         "all",
@@ -29,4 +29,16 @@ export const commandMap = new Map<string, GroupEventHandler>([
         },
     ],
     ["头衔", titleHandler],
+    [
+        "禁",
+        (e, plugin, config, argMsg) => {
+            muteHandler(e, plugin, config, argMsg, true);
+        },
+    ],
+    [
+        "解",
+        (e, plugin, config, argMsg) => {
+            muteHandler(e, plugin, config, argMsg, false);
+        },
+    ],
 ]);
