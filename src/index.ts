@@ -2,13 +2,13 @@ import { KiviPlugin, segment, makeForwardMsg, GroupMessageEvent } from "@kivibot
 import { config, commandMap, adminCmdMap } from "./config";
 import { adminCmdHandler } from "./module/adminCmd";
 import { accessHandler } from "./module/access";
+import { deepMerge } from "./utils";
 //@ts-ignore
 const { version } = require("../package.json");
 
 const plugin = new KiviPlugin("group-manager", version);
-const cmss = Array.from(adminCmdMap.keys()).map(cmd => config.cmdPrefix + cmd);
 plugin.onMounted(bot => {
-    plugin.saveConfig(Object.assign(config, plugin.loadConfig()));
+    plugin.saveConfig(deepMerge(config, plugin.loadConfig()));
     // 处理bot管理员配置指令
     plugin.onAdminCmd("/gmc", (e, params) => {
         adminCmdHandler(e, plugin, config, params);

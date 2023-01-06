@@ -1,5 +1,6 @@
 import type { Group, GroupMessageEvent, KiviPlugin, AtElem, Client } from "@kivibot/core";
 export * from "./validateTitle";
+export * from "./deepMerge";
 export const selfNoAuthMsg = "本Bot暂无权限哦~";
 export const roleAuth = {
     // 判断该uid是否是群管理
