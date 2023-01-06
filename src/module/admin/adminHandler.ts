@@ -7,7 +7,7 @@ export const adminHandler: GroupEventHandler = async (e, plugin, config, argMsg,
     const sender_id = e.sender.user_id;
     // 获取群对象和发送者群员对象
     const group = e.group;
-    const { permissionList, enableAt } = config.adminConfig as ModuleConfig;
+    const { permissionList, enableAt } = config.adminConfig;
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // bot若不是群主则发送
@@ -31,7 +31,7 @@ export const adminHandler: GroupEventHandler = async (e, plugin, config, argMsg,
             if (ifSelf(uid, plugin.bot!)) return e.reply(`无法对bot自身进行管理员操作哦`);
             try {
                 // 获取该成员,若不存在则报错
-                const member = group.pickMember(uid, true);
+                const member = group.pickMember(uid);
                 const nickname = member.info?.nickname;
                 // 若是添加管理员
                 if (params) {

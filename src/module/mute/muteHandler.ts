@@ -1,5 +1,4 @@
 import type { GroupEventHandler } from "../types";
-import type { ModuleConfig } from "../../config";
 import { selfNoAuthMsg, roleAuth, validateUid, handleAt, validateNumber, formatSeconds, ifSelf } from "../../utils";
 import { randomInt } from "@kivibot/core";
 export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
@@ -7,7 +6,7 @@ export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, 
     const sender_id = e.sender.user_id;
     // 获取群对象
     const group = e.group;
-    const { permissionList, enableAt } = config.muteConfig as ModuleConfig;
+    const { permissionList, enableAt } = config.muteConfig;
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // bot若不是管理员或群主则发送
@@ -31,8 +30,10 @@ export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, 
         if (validateUid(uid!)) {
             uid = Number(uid);
             if (ifSelf(uid, plugin.bot!)) return e.reply(`无法对bot自身进行禁言操作哦`);
+            if (roleAuth.isGroupAdmin(group, uid) && !roleAuth.selfIsGroupOwner(group))
+                return e.reply(`无法对管理员进行禁言操作哦`);
             try {
-                const member = group.pickMember(uid, true);
+                const member = group.pickMember(uid);
                 const nickname = member.info!.nickname;
                 // 若未指定time，则随机时间
                 if (!time) time = randomInt(1, 2592000);

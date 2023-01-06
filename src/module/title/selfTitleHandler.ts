@@ -7,7 +7,7 @@ export const selfTitleHandler: GroupEventHandler = async (e, plugin, config, arg
     // 获取群对象
     const group = e.group;
     // 是否开启自行申请
-    const { enableSelf } = config.titleConfig as ModuleConfig;
+    const { enableSelf } = config.titleConfig;
     // bot若不是管理或群主则发送
     if (!roleAuth.selfIsGroupOwner(group)) return e.reply(selfNoAuthMsg + "设置头衔需将bot设置为群主哦");
     // 判断是否开启自己申请

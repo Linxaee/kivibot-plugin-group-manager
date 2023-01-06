@@ -1,5 +1,13 @@
 import type { GroupRole } from "@kivibot/core";
-import { muteAllConfig, adminConfig, muteConfig, titleConfig } from "../module";
+import {
+    muteAllConfig,
+    adminConfig,
+    muteConfig,
+    titleConfig,
+    accessConfig,
+    TitleConfig,
+    AccessConfig,
+} from "../module";
 export const roleList: GroupRole[] = ["admin", "owner", "member"];
 // 配置默认值
 export const config: GroupManagerConfig = {
@@ -9,6 +17,7 @@ export const config: GroupManagerConfig = {
     adminConfig,
     titleConfig,
     muteConfig,
+    accessConfig,
 };
 
 // 插件配置
@@ -17,19 +26,21 @@ export interface GroupManagerConfig {
     enableGroups: number[];
     // 指令前缀
     cmdPrefix: string;
-    [k: string]: ModuleConfig | string | number[];
+    muteAllConfig: ModuleConfig;
+    adminConfig: ModuleConfig;
+    titleConfig: TitleConfig;
+    muteConfig: ModuleConfig;
+    accessConfig: AccessConfig;
 }
 
-// 模块配置
-export type ModuleConfig = ModuleBaseConfig & ModulePartConfig;
 // 模块基础配置
-export interface ModuleBaseConfig {
+export interface ModuleConfig {
+    // 模块名
+    name: string;
+    // 启用该模块的群聊
+    groups: number[];
     // 使用权限集
     permissionList: GroupRole[];
     // 是否支持At触发
     enableAt?: boolean;
-}
-// 模块单独配置
-export interface ModulePartConfig {
-    [k: string]: any;
 }

@@ -6,7 +6,7 @@ export const titleHandler: GroupEventHandler = async (e, plugin, config, argMsg,
     const sender_id = e.sender.user_id;
     // 获取群对象
     const group = e.group;
-    const { permissionList, enableAt } = config.titleConfig as ModuleConfig;
+    const { permissionList, enableAt } = config.titleConfig;
 
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
@@ -31,7 +31,7 @@ export const titleHandler: GroupEventHandler = async (e, plugin, config, argMsg,
             uid = Number(uid);
             try {
                 // 获取该成员,若不存在则报错
-                const member = group.pickMember(uid, true);
+                const member = group.pickMember(uid);
                 const nickname = member.info!.nickname;
                 // 若待设置头衔不存在或者为空则清空头衔
                 if (!title) {
