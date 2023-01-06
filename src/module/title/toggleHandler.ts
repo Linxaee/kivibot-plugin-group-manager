@@ -6,7 +6,7 @@ export const toggleHandler: GroupEventHandler = async (e, plugin, config, argMsg
     // 消息发送人的uid
     const sender_id = e.sender.user_id;
     // 获取群对象
-    const { permissionList } = config.titleConfig as TitleConfig;
+    const { permissionList } = config.titleConfig;
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // 更改配置

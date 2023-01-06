@@ -4,3 +4,4 @@ export * from "./muteAll";
 export * from "./mute";
 export * from "./admin";
 export * from "./title";
+export * from "./access";

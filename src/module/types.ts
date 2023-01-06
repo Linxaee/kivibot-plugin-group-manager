@@ -1,5 +1,7 @@
-import type { AllMessageEvent, Client, Group, GroupMessageEvent, KiviPlugin } from "@kivibot/core";
+import type { AllMessageEvent, Client, Group, GroupMessageEvent, GroupRequestEvent, KiviPlugin } from "@kivibot/core";
 import type { GroupManagerConfig } from "../config";
+import { AccessGroup } from "./access";
+// 群消息事件处理函数签名
 export type GroupEventHandler = (
     e: GroupMessageEvent,
     plugin: KiviPlugin,
@@ -10,9 +12,20 @@ export type GroupEventHandler = (
     params?: any
 ) => void;
 
+// bot管理员消息事件处理函数签名
 export type BotAdminCmdHandler = (
     e: AllMessageEvent,
-    params: string[],
     plugin: KiviPlugin,
-    config: GroupManagerConfig
+    config: GroupManagerConfig,
+    params: string[],
+    options?: any
 ) => void;
+
+// 加群事件处理函数签名
+export type AccessHandler = (plugin: KiviPlugin, e: GroupRequestEvent, group: AccessGroup) => void;
+// 指令拦截器函数签名,判断是否开启模块
+export type commandInterceptor = (
+    e: GroupMessageEvent,
+    config: GroupManagerConfig,
+    cmd: string
+) => Map<string, GroupEventHandler>;
