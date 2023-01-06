@@ -1,5 +1,6 @@
 import { KiviPlugin, segment, makeForwardMsg, GroupMessageEvent } from "@kivibot/core";
-import { config, commandMap, adminCmdMap } from "./config";
+import { config } from "./config";
+import { commandMap, adminCmdMap } from "./map";
 import { adminCmdHandler } from "./module/adminCmd";
 import { accessHandler } from "./module/access";
 import { deepMerge } from "./utils";

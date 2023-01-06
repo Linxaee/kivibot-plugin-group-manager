@@ -1,6 +1,7 @@
 import type { GroupEventHandler, commandInterceptor } from "../module";
 
 import { muteAllCommands, muteCommands, adminCommands, titleCommands, accessCommands } from "../module";
+// 普通指令
 export const commandMap: commandInterceptor = (e, config, cmd) =>
     new Map<string, GroupEventHandler>([
         ...muteAllCommands(e, config, cmd),
