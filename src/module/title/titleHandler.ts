@@ -11,7 +11,7 @@ export const titleHandler: GroupEventHandler = async (e, plugin, config, argMsg,
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // bot若不是管理或群主则发送
-    if (!roleAuth.selfIsGroupOwner(group)) return e.reply(selfNoAuthMsg + "设置头衔需将bot设置为群主");
+    if (!roleAuth.selfIsGroupOwner(group)) return e.reply(selfNoAuthMsg + "设置头衔需将bot设置为群主哦");
     else {
         // uid
         let uid: number | string | undefined = undefined;

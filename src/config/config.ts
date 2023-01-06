@@ -1,7 +1,7 @@
 import type { GroupRole } from "@kivibot/core";
 import { muteAllConfig, adminConfig, muteConfig, titleConfig } from "../module";
 export const roleList: GroupRole[] = ["admin", "owner", "member"];
-// 默认配置值
+// 配置默认值
 export const config: GroupManagerConfig = {
     enableGroups: [],
     cmdPrefix: "/",
