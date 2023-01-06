@@ -1,4 +1,4 @@
-import type { AccessHandler } from "../types";
+import type { AccessHandler } from "../../types";
 import { GroupRequestEvent, KiviPlugin } from "@kivibot/core";
 export const accessHandler: AccessHandler = (plugin, e, group) => {
     // 获取uid,gid,申请消息

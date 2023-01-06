@@ -1,4 +1,4 @@
-import type { GroupEventHandler } from "../types";
+import type { GroupEventHandler } from "@/module/types";
 export const getAdminHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     const { accessGroup: groups } = config.accessConfig;
     // 若查看本群分管

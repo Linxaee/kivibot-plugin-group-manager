@@ -1,5 +1,5 @@
-import type { GroupEventHandler } from "../types";
-import { validateNumber } from "../../utils";
+import type { GroupEventHandler } from "@/module/types";
+import { validateNumber } from "@/utils";
 // 查看词条处理函数,支持群词条和所有词条
 export const setTagHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     const { scope, handle } = params;

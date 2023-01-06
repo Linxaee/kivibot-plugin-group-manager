@@ -1,4 +1,4 @@
-import type { AllMessageEvent, Client, Group, GroupMessageEvent, GroupRequestEvent, KiviPlugin } from "@kivibot/core";
+import type { AllMessageEvent, GroupMessageEvent, GroupRequestEvent, KiviPlugin } from "@kivibot/core";
 import type { GroupManagerConfig } from "../config";
 import { AccessGroup } from "./access";
 // 群消息事件处理函数签名

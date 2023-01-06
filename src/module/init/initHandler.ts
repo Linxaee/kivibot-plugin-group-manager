@@ -1,5 +1,5 @@
 import { KiviPlugin } from "@kivibot/core";
-import { GroupManagerConfig, ModuleConfig } from "../../config/";
+import { GroupManagerConfig } from "@/config/";
 import { AccessConfig } from "../access";
 /**
  * @description 当群聊第一次启用插件时，将群号加入各插件启用群聊列表

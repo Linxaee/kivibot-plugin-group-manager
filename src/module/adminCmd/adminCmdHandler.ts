@@ -1,7 +1,7 @@
 import type { GroupRole } from "@kivibot/core";
 import type { BotAdminCmdHandler } from "../types";
-import type { ModuleConfig } from "../../config";
-import { roleList } from "../../config";
+import type { ModuleConfig } from "@/config";
+import { roleList } from "@/config";
 import { initHandler } from "../init";
 export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, param) => {
     const [module, key, value] = param;

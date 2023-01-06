@@ -1,4 +1,4 @@
-import type { GroupEventHandler } from "../types";
+import type { GroupEventHandler } from "@/module/types";
 // 查看词条处理函数,支持群词条和所有词条
 export const getTagHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     // 若是查看当前群词条

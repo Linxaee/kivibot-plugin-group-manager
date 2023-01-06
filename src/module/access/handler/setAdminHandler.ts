@@ -1,5 +1,5 @@
-import type { GroupEventHandler } from "../types";
-import { handleAt, validateUid } from "../../utils/index";
+import type { GroupEventHandler } from "@/module/types";
+import { handleAt, validateUid } from "@/utils/index";
 export const setAdminHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     const { accessGroup: groups, enableAt } = config.accessConfig;
     const gid = e.group_id;

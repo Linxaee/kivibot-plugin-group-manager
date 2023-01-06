@@ -1,12 +1,17 @@
-export const deepMerge = (obj1: any, obj2: any) => {
-    const merged = { ...obj1 };
-    for (const key in obj2) {
-        if (obj2[key] instanceof Object && !(obj2[key] instanceof Array)) {
-            merged[key] = deepMerge(obj1[key], obj2[key]);
+/**
+ * @description 将source对象深合并进target对象
+ * @param target 目标对象
+ * @param source 源对象
+ * @returns
+ */
+export const deepMerge = (target: any, source: any) => {
+    const merged = { ...target };
+    for (const key in source) {
+        if (source[key] instanceof Object && !(source[key] instanceof Array)) {
+            merged[key] = deepMerge(target[key], source[key]);
         } else {
-            merged[key] = obj2[key];
+            merged[key] = source[key];
         }
     }
-
     return merged;
 };

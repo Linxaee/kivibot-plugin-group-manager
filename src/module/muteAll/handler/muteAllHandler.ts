@@ -1,6 +1,6 @@
-import type { GroupEventHandler } from "../types";
-import type { ModuleConfig } from "../../config";
-import { selfNoAuthMsg, roleAuth } from "../../utils";
+import type { GroupEventHandler } from "@/module/types";
+import type { ModuleConfig } from "@/config";
+import { selfNoAuthMsg, roleAuth } from "../../../utils";
 export const muteAllHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
     const sender_id = e.sender.user_id;

@@ -1,6 +1,5 @@
-import type { GroupEventHandler } from "../types";
-import type { ModuleConfig } from "../../config";
-import { selfNoAuthMsg, roleAuth, validateUid, handleAt, validateTitle } from "../../utils";
+import type { GroupEventHandler } from "@/module/types";
+import { selfNoAuthMsg, roleAuth, validateUid, handleAt, validateTitle } from "@/utils";
 export const titleHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
     const sender_id = e.sender.user_id;

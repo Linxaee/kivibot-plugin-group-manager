@@ -1,6 +1,6 @@
-import type { GroupEventHandler } from "../types";
-import type { TitleConfig } from "./index";
-import { roleAuth } from "../../utils";
+import type { GroupEventHandler } from "@/module/types";
+import type { TitleConfig } from "../config";
+import { roleAuth } from "@/utils";
 
 export const toggleHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
