@@ -13,14 +13,12 @@ export const accessHandler: AccessHandler = (plugin, e, group) => {
     } else {
         if (tags.length === 0) {
             sendToAdmins(plugin, group_id, admins, constructMsg(e, "无(请尽快设置审批关键词)", true));
-            // return e.approve(true);
-            return;
+            return e.approve(true);
         }
         const { passed, contain } = validateTag(tags, comment);
         if (passed) {
             sendToAdmins(plugin, group_id, admins, constructMsg(e, contain.join("、"), true));
-            // return e.approve(true);
-            return;
+            return e.approve(true);
         } else {
             sendToAdmins(plugin, group_id, admins, constructMsg(e, "未检测到审批关键词", false));
             return e.approve(false);
