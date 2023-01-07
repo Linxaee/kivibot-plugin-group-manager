@@ -5,13 +5,15 @@
  * @returns
  */
 export const deepMerge = (target: any, source: any) => {
-    const merged = { ...target };
-    for (const key in source) {
-        if (source[key] instanceof Object && !(source[key] instanceof Array)) {
-            merged[key] = deepMerge(target[key], source[key]);
+    for (const key of Object.keys(source)) {
+        if (source[key] instanceof Object && !Array.isArray(source[key])) {
+            if (!(key in target)) {
+                Object.assign(target, { [key]: {} });
+            }
+            deepMerge(target[key], source[key]);
         } else {
-            merged[key] = source[key];
+            Object.assign(target, { [key]: source[key] });
         }
     }
-    return merged;
+    return target;
 };
