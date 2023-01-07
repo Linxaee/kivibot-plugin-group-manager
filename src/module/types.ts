@@ -1,6 +1,6 @@
 import type { AllMessageEvent, GroupMessageEvent, GroupRequestEvent, KiviPlugin } from "@kivibot/core";
 import type { GroupManagerConfig } from "../config";
-import { AccessGroup } from "./access";
+import { AccessSetting } from "./access";
 // 群消息事件处理函数签名
 export type GroupEventHandler = (
     e: GroupMessageEvent,
@@ -22,7 +22,7 @@ export type BotAdminCmdHandler = (
 ) => void;
 
 // 加群事件处理函数签名
-export type AccessHandler = (plugin: KiviPlugin, e: GroupRequestEvent, group: AccessGroup) => void;
+export type AccessHandler = (plugin: KiviPlugin, e: GroupRequestEvent,  config: GroupManagerConfig, group: AccessSetting) => void;
 // 指令拦截器函数签名,判断是否开启模块
 export type commandInterceptor = (
     e: GroupMessageEvent,

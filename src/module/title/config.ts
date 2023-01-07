@@ -1,9 +1,9 @@
-import { ModuleConfig } from "@/config";
+import { ModuleConfig } from "../../config";
 // title模块默认值
 export const titleConfig: TitleConfig = {
-    name: "设置头衔",
-    groups: [],
-    permissionList: ["admin", "owner"],
+    enable: true,
+    name: "title",
+    permissionList: ["owner", "admin"],
     enableAt: true,
     enableSelf: true,
 };

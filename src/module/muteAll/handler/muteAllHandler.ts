@@ -1,12 +1,12 @@
-import type { GroupEventHandler } from "@/module/types";
-import type { ModuleConfig } from "@/config";
-import { selfNoAuthMsg, roleAuth } from "../../../utils";
+import type { GroupEventHandler } from "../../../module/types";
+import { selfNoAuthMsg, roleAuth, getGroupFromCfg } from "../../../utils";
 export const muteAllHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
     const sender_id = e.sender.user_id;
     // 获取群对象
     const group = e.group;
-    const { permissionList } = config.muteAllConfig;
+    const groupConfig = getGroupFromCfg(e, config);
+    const { permissionList } = groupConfig!.muteAllConfig;
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // bot若不是管理员或群主则发送
@@ -20,6 +20,7 @@ export const muteAllHandler: GroupEventHandler = (e, plugin, config, argMsg, par
                 return e.reply("已开启全员禁言");
             }
         } else {
+            console.log(group.all_muted);
             // 若尚未开启全员禁言
             if (!group.all_muted) return e.reply("尚未开启全员禁言,无需关闭");
             else {

@@ -1,44 +1,49 @@
 import type { GroupRole } from "@kivibot/core";
-import {
-    muteAllConfig,
-    adminConfig,
-    muteConfig,
-    titleConfig,
-    accessConfig,
-    TitleConfig,
-    AccessConfig,
-} from "../module";
+import { ModuleName } from "../map";
+import { TitleConfig, AccessConfig } from "../module";
 export const roleList: GroupRole[] = ["admin", "owner", "member"];
+//@ts-ignore
+const { version } = require("../../package.json");
+console.log(version, typeof version);
+
 // 配置默认值
 export const config: GroupManagerConfig = {
+    configVersion: version,
     enableGroups: [],
-    cmdPrefix: "/",
-    muteAllConfig,
-    adminConfig,
-    titleConfig,
-    muteConfig,
-    accessConfig,
+    globalBlackList: [],
+    groupConfigs: [],
 };
 
 // 插件配置
 export interface GroupManagerConfig {
+    // 配置版本
+    configVersion: number;
     // 可用群聊
     enableGroups: number[];
-    // 指令前缀
-    cmdPrefix: string;
-    muteAllConfig: ModuleConfig;
-    adminConfig: ModuleConfig;
-    titleConfig: TitleConfig;
-    muteConfig: ModuleConfig;
-    accessConfig: AccessConfig;
+    groupConfigs: GroupConfig[];
+    // 全局黑名单
+    globalBlackList: number[];
 }
 
+export interface GroupConfig {
+    // 群号
+    gid: number;
+    // 指令前缀
+    cmdPrefix: string;
+    // 启用的模块
+    enableModules: ModuleName[];
+    muteAllConfig: ModuleConfig;
+    muteConfig: ModuleConfig;
+    adminConfig: ModuleConfig;
+    titleConfig: TitleConfig;
+    accessConfig: AccessConfig;
+}
 // 模块基础配置
 export interface ModuleConfig {
+    // 当前模块是否启用
+    enable: boolean;
     // 模块名
-    name: string;
-    // 启用该模块的群聊
-    groups: number[];
+    name: ModuleName;
     // 使用权限集
     permissionList: GroupRole[];
     // 是否支持At触发

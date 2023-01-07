@@ -1,13 +1,13 @@
-import type { GroupEventHandler } from "@/module/types";
-import type { ModuleConfig } from "@/config";
-import { selfNoAuthMsg, roleAuth, validateTitle } from "../../../utils";
+import type { GroupEventHandler } from "../../../module/types";
+import { selfNoAuthMsg, roleAuth, validateTitle, getGroupFromCfg } from "../../../utils";
 export const selfTitleHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
     const sender_id = e.sender.user_id;
     // 获取群对象
     const group = e.group;
+    const groupConfig = getGroupFromCfg(e, config);
     // 是否开启自行申请
-    const { enableSelf } = config.titleConfig;
+    const { enableSelf } = groupConfig!.titleConfig;
     // bot若不是管理或群主则发送
     if (!roleAuth.selfIsGroupOwner(group)) return e.reply(selfNoAuthMsg + "设置头衔需将bot设置为群主哦");
     // 判断是否开启自己申请

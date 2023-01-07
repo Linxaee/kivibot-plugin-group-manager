@@ -1,6 +1,13 @@
+import type { GroupConfig, GroupManagerConfig } from "../../config";
+import type { AccessConfig } from "../access";
+import { moduleMap, ModuleName } from "../../map";
 import { KiviPlugin } from "@kivibot/core";
-import { GroupManagerConfig } from "@/config/";
-import { AccessConfig } from "../access";
+import { muteAllConfig } from "../muteAll/config";
+import { adminConfig } from "../admin/config";
+import { titleConfig } from "../title/config";
+import { muteConfig } from "../mute/config";
+import { accessConfig } from "../access/config";
+
 /**
  * @description 当群聊第一次启用插件时，将群号加入各插件启用群聊列表
  * @param plugin 插件实例
@@ -8,21 +15,25 @@ import { AccessConfig } from "../access";
  * @param gid 群id
  */
 export const initHandler = (plugin: KiviPlugin, config: GroupManagerConfig, gid: number) => {
-    const entries = Object.entries(config);
-    for (let i = 0; i < entries.length; i++) {
-        const [module] = entries[i];
-        if (["enableGroups", "cmdPrefix"].includes(module)) continue;
-        const curModule = (config as any)[module] as AccessConfig;
-        // 单独初始化自动审批群聊配置
-        if (module === "accessConfig") {
-            curModule.accessGroup.push({
-                gid,
-                admins: [...plugin.admins],
-                tags: [],
-                blackList: [],
-            });
-        }
-        if (!curModule.groups.includes(gid)) curModule.groups.push(gid);
-        plugin.saveConfig(config);
+    // 若存在则存入
+    if (!config.groupConfigs.find(group => group.gid === gid)) {
+        // 构造初始化对象
+        const newGroup: GroupConfig = {
+            gid,
+            cmdPrefix: "/",
+            enableModules: Object.keys(moduleMap) as ModuleName[],
+            muteAllConfig,
+            muteConfig,
+            adminConfig,
+            titleConfig,
+            accessConfig,
+        };
+        newGroup.accessConfig.setting = {
+            admins: [...plugin.admins],
+            tags: [],
+            blackList: [],
+        };
+        config.groupConfigs.push(newGroup);
     }
+    plugin.saveConfig(config);
 };

@@ -1,14 +1,22 @@
 import type { AccessHandler } from "../../types";
 import { GroupRequestEvent, KiviPlugin } from "@kivibot/core";
-export const accessHandler: AccessHandler = (plugin, e, group) => {
+export const accessHandler: AccessHandler = (plugin, e, config, group) => {
+    const { globalBlackList } = config;
     // 获取uid,gid,申请消息
     const { user_id, group_id, comment } = e;
     // 获取黑名单,分管员,审批关键词
     const { blackList, admins, tags } = group;
     // 若申请人在黑名单中
+    console.log(globalBlackList);
+
+    if (globalBlackList.includes(user_id)) {
+        // 拒绝并发送消息
+        sendToAdmins(plugin, group_id, admins, constructMsg(e, "该用户在全局黑名单中", false));
+        return e.approve(false);
+    }
     if (blackList.includes(user_id)) {
         // 拒绝并发送消息
-        sendToAdmins(plugin, group_id, admins, constructMsg(e, "该用户在黑名单中", false));
+        sendToAdmins(plugin, group_id, admins, constructMsg(e, "该用户在本群黑名单中", false));
         return e.approve(false);
     } else {
         if (tags.length === 0) {

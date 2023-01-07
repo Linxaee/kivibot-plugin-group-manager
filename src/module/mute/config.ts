@@ -1,8 +1,8 @@
-import { ModuleConfig } from "@/config";
+import { ModuleConfig } from "../../config";
 
 export const muteConfig: ModuleConfig = {
-    name: "单独禁言",
-    groups: [],
-    permissionList: ["admin", "owner"],
+    enable: true,
+    name: "mute",
+    permissionList: ["owner", "admin"],
     enableAt: true,
 };

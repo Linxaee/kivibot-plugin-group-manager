@@ -1,8 +1,18 @@
-import { BotAdminCmdHandler, GroupEventHandler, commandInterceptor } from "@/module/types";
-import { getAdminHandler, getTagHandler, setAdminHandler, setTagHandler } from "./handler";
+import { BotAdminCmdHandler, GroupEventHandler, commandInterceptor } from "../../module/types";
+import {
+    getAdminHandler,
+    getTagHandler,
+    setAdminHandler,
+    setTagHandler,
+    blackListHandler,
+    getBlacklistHandler,
+} from "./handler";
 import { accessConfig } from "./config";
+import { getGroupFromCfg, getModuleCnName, getModuleEnable } from "../../utils";
+
 // access模块普通指令
 export const accessCommands: commandInterceptor = (e, config, cmd) => {
+    const group = getGroupFromCfg(e, config);
     const map = new Map<string, GroupEventHandler>([
         [
             "查看词条",
@@ -23,6 +33,18 @@ export const accessCommands: commandInterceptor = (e, config, cmd) => {
             },
         ],
         [
+            "黑+",
+            (e, plugin, config, argMsg) => {
+                blackListHandler(e, plugin, config, argMsg, { scope: "group", handle: "add" });
+            },
+        ],
+        [
+            "黑-",
+            (e, plugin, config, argMsg) => {
+                blackListHandler(e, plugin, config, argMsg, { scope: "group", handle: "remove" });
+            },
+        ],
+        [
             "分管+",
             (e, plugin, config, argMsg) => {
                 setAdminHandler(e, plugin, config, argMsg, true);
@@ -40,10 +62,16 @@ export const accessCommands: commandInterceptor = (e, config, cmd) => {
                 getAdminHandler(e, plugin, config, argMsg, false);
             },
         ],
+        [
+            "查看黑名单",
+            (e, plugin, config, argMsg) => {
+                getBlacklistHandler(e, plugin, config, argMsg, false);
+            },
+        ],
     ]);
     // 若map中存在指令且没开启则回复
-    if (!config.accessConfig.groups.includes(e.group_id) && map.has(cmd))
-        return e.reply(`本群尚未启用${accessConfig.name}模块`) as any;
+    if (!getModuleEnable(group!, accessConfig.name) && map.has(cmd))
+        return e.reply(`本群尚未启用${getModuleCnName(accessConfig)}模块`) as any;
     return map;
 };
 
@@ -71,6 +99,24 @@ export const accessAdminCmd = new Map<string, BotAdminCmdHandler>([
         "所有分管",
         (e, plugin, config, params) => {
             getAdminHandler(e as any, plugin, config, params.join(" "), true);
+        },
+    ],
+    [
+        "所有黑名单",
+        (e, plugin, config, params) => {
+            getBlacklistHandler(e as any, plugin, config, params.join(" "), true);
+        },
+    ],
+    [
+        "全局黑+",
+        (e, plugin, config, params) => {
+            blackListHandler(e as any, plugin, config, params.join(" "), { scope: "global", handle: "add" });
+        },
+    ],
+    [
+        "全局黑-",
+        (e, plugin, config, params) => {
+            blackListHandler(e as any, plugin, config, params.join(" "), { scope: "global", handle: "remove" });
         },
     ],
 ]);

@@ -1,7 +1,9 @@
 import type { GroupEventHandler, commandInterceptor } from "../types";
 import { selfTitleHandler, titleHandler, toggleHandler } from "./handler";
 import { titleConfig } from "./config";
+import { getGroupFromCfg, getModuleCnName, getModuleEnable } from "../../utils";
 export const titleCommands: commandInterceptor = (e, config, cmd) => {
+    const group = getGroupFromCfg(e, config);
     const map = new Map<string, GroupEventHandler>([
         ["头衔", titleHandler],
         ["申请头衔", selfTitleHandler],
@@ -19,7 +21,7 @@ export const titleCommands: commandInterceptor = (e, config, cmd) => {
         ],
     ]);
     // 若map中存在指令且没开启则回复
-    if (!config.titleConfig.groups.includes(e.group_id) && map.has(cmd))
-        return e.reply(`本群尚未启用${titleConfig.name}模块`) as any;
+    if (!getModuleEnable(group!, titleConfig.name) && map.has(cmd))
+        return e.reply(`本群尚未启用${getModuleCnName(titleConfig)}模块`) as any;
     return map;
 };
