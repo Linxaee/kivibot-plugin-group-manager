@@ -1,5 +1,5 @@
-import { GroupManagerConfig, ModuleConfig, config } from "../config";
-import { KiviPlugin, PluginDataDir, segment } from "@kivibot/core";
+import { GroupManagerConfig } from "../config";
+import { KiviPlugin, PluginDataDir } from "@kivibot/core";
 //@ts-ignore
 const fs = require("fs");
 /**
@@ -31,8 +31,15 @@ export const validateTitle = (title: string) => {
     return !(titleLen > 12);
 };
 
-export const validateConfigVersion = (version: string, plugin: KiviPlugin, config: GroupManagerConfig) => {
-    if (plugin.loadConfig().configVersion !== version) {
+/**
+ * @description 验证版本是否小于1.3.5
+ * @param plugin 插件实例
+ * @param config 插件配置
+ * @returns
+ */
+export const validateConfigVersion = (plugin: KiviPlugin, config: GroupManagerConfig) => {
+    const oldVersion = plugin.loadConfig().configVersion;
+    if (!oldVersion || oldVersion < "1.3.5") {
         // 监测插件版本是否正确
         fs.writeFileSync(PluginDataDir + "/group-manager/config.json", JSON.stringify(config));
         const admins = plugin.admins;
@@ -42,5 +49,5 @@ export const validateConfigVersion = (version: string, plugin: KiviPlugin, confi
 带来不便，非常抱歉！`;
             plugin.bot?.sendPrivateMsg(uid, msg);
         });
-    } else console.log(5);
+    }
 };

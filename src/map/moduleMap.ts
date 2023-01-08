@@ -31,7 +31,7 @@ export const moduleKeyMap = {
 /**
  * @description 将转入的字符串中关键字替换
  * @param str 待转化字符串
- * @returns
+ * @returns 替换关键词后的字符串
  */
 export const transformModuleKey = (str: string): string => {
     let transformed = str;

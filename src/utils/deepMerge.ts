@@ -2,7 +2,7 @@
  * @description 将source对象深合并进target对象
  * @param target 目标对象
  * @param source 源对象
- * @returns
+ * @returns 合并后的对象
  */
 export const deepMerge = (target: any, source: any) => {
     for (const key of Object.keys(source)) {

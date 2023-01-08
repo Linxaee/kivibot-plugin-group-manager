@@ -9,9 +9,10 @@ const { version } = require("../package.json");
 
 const plugin = new KiviPlugin("group-manager", version);
 plugin.onMounted(bot => {
-    // 检查配置版本
-    validateConfigVersion(version, plugin, config);
+    // 检查配置版本是否小于1.3.5
+    validateConfigVersion(plugin, config);
     plugin.saveConfig(deepMerge(config, plugin.loadConfig()));
+    // 在命令前加上 /
     const botAdminGlobalCmd = Array.from(adminCmdMap.keys()).map(cmd => "/" + cmd);
     // 处理bot管理员配置指令
     plugin.onAdminCmd("/gmc", (e, params) => {
@@ -22,7 +23,6 @@ plugin.onMounted(bot => {
         const { raw_message } = e;
         const temp = raw_message.slice(1).split(" ");
         const [cmd, argMsg] = [temp.shift(), temp.join(" ")];
-        console.log(cmd);
 
         if (!adminCmdMap.has(cmd!)) return;
         const handler = adminCmdMap.get(cmd!);

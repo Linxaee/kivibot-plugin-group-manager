@@ -1,5 +1,4 @@
 import type { GroupConfig, GroupManagerConfig } from "../../config";
-import type { AccessConfig } from "../access";
 import { moduleMap, ModuleName } from "../../map";
 import { KiviPlugin } from "@kivibot/core";
 import { muteAllConfig } from "../muteAll/config";
@@ -9,7 +8,7 @@ import { muteConfig } from "../mute/config";
 import { accessConfig } from "../access/config";
 
 /**
- * @description 当群聊第一次启用插件时，将群号加入各插件启用群聊列表
+ * @description 当群聊第一次启用插件时，将该群加入插件群聊配置
  * @param plugin 插件实例
  * @param config 插件配置
  * @param gid 群id
