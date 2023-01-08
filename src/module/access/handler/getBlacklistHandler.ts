@@ -1,10 +1,10 @@
 import type { GroupEventHandler } from "../../types";
-import { getGroupFromCfg } from "../../../utils";
+import { getGroupConfig } from "../../../utils";
 export const getBlacklistHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
     // 若查看本群黑名单
     if (!params) {
-        const group = getGroupFromCfg(e, config);
-        const setting = group?.accessConfig.setting;
+        const groupConfig = getGroupConfig(e, config);
+        const setting = groupConfig?.accessConfig.setting;
         const blackList = setting!.blackList;
         if (blackList?.length === 0) return e.reply("本群黑名单为空", true);
         let msg = `本群当前黑名单有:\n`;
@@ -21,8 +21,7 @@ export const getBlacklistHandler: GroupEventHandler = async (e, plugin, config, 
         return e.reply(msg, true);
     } else {
         // 若查看所有黑名单
-        let baseMsg = "该bot所在的所有开启群管功能的群聊有如下黑名单:\n";
-        const groups = config.groupConfigs;
+        let baseMsg = "该bot所在的所有开启群管功能的群组有如下黑名单:\n";
         const globalBlackList = config.globalBlackList;
         let globalBlackMsg = "全局黑名单:\n";
         for (let i = 0; i < globalBlackList.length; i++) {
@@ -32,10 +31,14 @@ export const getBlacklistHandler: GroupEventHandler = async (e, plugin, config, 
             globalBlackMsg += `\t${info.nickname}(${info.user_id})\n`;
         }
         baseMsg += globalBlackMsg + "\n";
-        for (let i = 0; i < groups.length; i++) {
-            const item = groups[i];
-            const group = plugin.bot?.pickGroup(item.gid);
-            const blackList = item.accessConfig.setting.blackList;
+        const groupConfigs = config.groupConfigs;
+        const groupKeys = Object.keys(groupConfigs).map(key => Number(key));
+        // 遍历groups输出所有黑名单
+        for (let i = 0; i < groupKeys.length; i++) {
+            const key = groupKeys[i];
+            const groupConfig = groupConfigs[key];
+            const group = plugin.bot?.pickGroup(key);
+            const blackList = groupConfig.accessConfig.setting.blackList;
             let blackMsg = "";
             for (let j = 0; j < blackList.length; j++) {
                 const uid = blackList[j];
@@ -48,10 +51,11 @@ export const getBlacklistHandler: GroupEventHandler = async (e, plugin, config, 
             }
 
             let msg =
-                i === groups.length - 1
+                i === groupKeys.length - 1
                     ? `${i + 1}.${group?.name}(${group?.gid}):\n${blackMsg}`
                     : `${i + 1}.${group?.name}(${group?.gid}):\n${blackMsg}\n`;
             baseMsg += msg;
+            i++;
         }
         return e.reply(baseMsg, true);
     }

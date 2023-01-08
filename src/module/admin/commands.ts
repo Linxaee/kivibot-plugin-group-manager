@@ -1,10 +1,10 @@
 import type { GroupEventHandler, commandInterceptor } from "../types";
 import { adminHandler } from "./handler/adminHandler";
 import { adminConfig } from "./config";
-import { getGroupFromCfg, getModuleCnName, getModuleEnable } from "../../utils";
+import { getGroupConfig, getModuleCnName, getModuleEnable } from "../../utils";
 // admin模块普通指令
 export const adminCommands: commandInterceptor = (e, config, cmd) => {
-    const group = getGroupFromCfg(e, config);
+    const groupConfig = getGroupConfig(e, config);
     const map = new Map<string, GroupEventHandler>([
         [
             "管理+",
@@ -20,7 +20,7 @@ export const adminCommands: commandInterceptor = (e, config, cmd) => {
         ],
     ]);
     // 若map中存在指令且没开启则回复
-    if (!getModuleEnable(group!, adminConfig.name) && map.has(cmd))
+    if (!getModuleEnable(groupConfig!, adminConfig.name) && map.has(cmd))
         return e.reply(`本群尚未启用${getModuleCnName(adminConfig)}模块`) as any;
     return map;
 };

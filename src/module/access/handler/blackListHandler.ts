@@ -1,5 +1,5 @@
 import type { GroupEventHandler } from "../../../module/types";
-import { getGroupFromCfg, validateNumber } from "../../../utils";
+import { getGroupConfig, validateNumber } from "../../../utils";
 import { validateUid } from "../../../utils/validate";
 // 查看词条处理函数,支持群词条和所有词条
 export const blackListHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
@@ -8,8 +8,8 @@ export const blackListHandler: GroupEventHandler = async (e, plugin, config, arg
     if (scope === "group") {
         // 处理添加操作
         if (handle === "add") {
-            const group = getGroupFromCfg(e, config);
-            const setting = group?.accessConfig.setting;
+            const groupConfig = getGroupConfig(e, config);
+            const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的新uid
             const newUid = argMsg.split(" ");
             // 成功添加的词条
@@ -46,8 +46,8 @@ export const blackListHandler: GroupEventHandler = async (e, plugin, config, arg
             );
         } else {
             // 处理刪除操作
-            const group = getGroupFromCfg(e, config);
-            const setting = group?.accessConfig.setting;
+            const groupConfig = getGroupConfig(e, config);
+            const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的新uid
             const oldUid = argMsg.split(" ");
             // 成功添加的词条

@@ -4,23 +4,20 @@ import type { ModuleConfig } from "../../config";
 import { roleList } from "../../config";
 import { initHandler } from "../init";
 import { transformModuleKey } from "../../map";
-import { getModuleCnName } from "../../utils";
+import { getGroupConfig, getModuleCnName } from "../../utils";
 export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, param) => {
     const [module, key, value] = param;
 
     // 开启插件
     if (module === "on") {
         if (e.message_type != "group") {
-            return e.reply("请在群聊中使用此指令", true);
+            return e.reply("请在群组中使用此指令", true);
         }
-
         const gid = e.group_id;
         if (gid) {
             if (!config.enableGroups.includes(gid)) {
-                config.enableGroups.push(gid);
-                // 初始化，将各个模块的开启群聊列表加入当前群聊
+                // 初始化，将各个模块的开启群组列表加入当前群组
                 initHandler(plugin, config, gid);
-                plugin.saveConfig(config);
             }
             return e.reply("本群已开启群管功能", true);
         }
@@ -28,7 +25,7 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     // 关闭插件
     if (module === "off") {
         if (e.message_type != "group") {
-            return e.reply("请在群聊中使用此指令", true);
+            return e.reply("请在群组中使用此指令", true);
         }
         const gid = e.group_id;
         if (gid) {
@@ -42,8 +39,8 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 修改前缀
     if (module === "prefix") {
-        if (e.message_type != "group") return e.reply("请在群聊内使用", true);
-        const groupConfig = config.groupConfigs.find(group => group.gid === e.group_id);
+        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
         groupConfig.cmdPrefix = key;
         plugin.saveConfig(config);
@@ -51,8 +48,8 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 查看本群详情
     if (module === "dt") {
-        if (e.message_type != "group") return e.reply("请在群聊内使用", true);
-        const groupConfig = config.groupConfigs.find(group => group.gid === e.group_id);
+        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
         return e.reply(
             `本群的详细配置为:\n${transformModuleKey(
@@ -63,8 +60,8 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 开启模块
     if (module && key === "on") {
-        if (e.message_type != "group") return e.reply("请在群聊内使用", true);
-        const groupConfig = config.groupConfigs.find(group => group.gid === e.group_id);
+        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块
@@ -82,8 +79,8 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
 
     // 关闭模块
     if (module && key === "off") {
-        if (e.message_type != "group") return e.reply("请在群聊内使用", true);
-        const groupConfig = config.groupConfigs.find(group => group.gid === e.group_id);
+        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块
@@ -101,8 +98,8 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
 
     // 模块配置查看
     if (module && key === "dt") {
-        if (e.message_type != "group") return e.reply("请在群聊内使用", true);
-        const groupConfig = config.groupConfigs.find(group => group.gid === e.group_id);
+        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块的权限组
@@ -120,8 +117,8 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 模块权限组查看
     if (module && key === "list") {
-        if (e.message_type != "group") return e.reply("请在群聊内使用", true);
-        const groupConfig = config.groupConfigs.find(group => group.gid === e.group_id);
+        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块的权限组
@@ -138,8 +135,8 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 模块权限组添加
     if (module && key === "+" && value) {
-        if (e.message_type != "group") return e.reply("请在群聊内使用", true);
-        const groupConfig = config.groupConfigs.find(group => group.gid === e.group_id);
+        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块的权限组
@@ -162,8 +159,8 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 模块权限组删除
     if (module && key === "-" && value) {
-        if (e.message_type != "group") return e.reply("请在群聊内使用", true);
-        const groupConfig = config.groupConfigs.find(group => group.gid === e.group_id);
+        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块的权限组
@@ -188,8 +185,8 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
 
     // 启用at功能
     if (module && key === "at" && value) {
-        if (e.message_type != "group") return e.reply("请在群聊内使用", true);
-        const groupConfig = config.groupConfigs.find(group => group.gid === e.group_id);
+        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块

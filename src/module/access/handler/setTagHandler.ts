@@ -1,5 +1,5 @@
 import type { GroupEventHandler } from "../../../module/types";
-import { getGroupFromCfg, validateNumber } from "../../../utils";
+import { getGroupConfig, validateNumber } from "../../../utils";
 // 查看词条处理函数,支持群词条和所有词条
 export const setTagHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     const { scope, handle } = params;
@@ -7,8 +7,8 @@ export const setTagHandler: GroupEventHandler = (e, plugin, config, argMsg, para
     if (scope === "group") {
         // 处理添加操作
         if (handle === "add") {
-            const group = getGroupFromCfg(e, config);
-            const setting = group?.accessConfig.setting;
+            const groupConfig = getGroupConfig(e, config);
+            const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的新词条
             const newTags = argMsg.split(" ");
             // 成功添加的词条
@@ -32,8 +32,8 @@ export const setTagHandler: GroupEventHandler = (e, plugin, config, argMsg, para
             );
         } else {
             // 处理刪除操作
-            const group = getGroupFromCfg(e, config);
-            const setting = group?.accessConfig.setting;
+            const groupConfig = getGroupConfig(e, config);
+            const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的老词条
             const oldTags = argMsg.split(" ");
             // 成功刪除的词条
@@ -50,18 +50,18 @@ export const setTagHandler: GroupEventHandler = (e, plugin, config, argMsg, para
             return e.reply(`成功移除审批词条:${successTag.join("、")}`, true);
         }
     } else {
-        // 若是设置指定群聊词条
+        // 若是设置指定群组词条
         const group_id = argMsg.split(" ")[0];
         if (!validateNumber(group_id)) return e.reply("请输入正确的群号哦", true);
         // 处理添加操作
         if (handle === "add") {
             const aimGid = Number(group_id);
-            // 指定群聊对象
+            // 指定群组对象
             const aimGroup = plugin.bot?.pickGroup(aimGid);
-            if (!getGroupFromCfg(aimGid, config)) return e.reply("指定群聊尚未开启群管插件", true);
+            if (!getGroupConfig(aimGid, config)) return e.reply("指定群组尚未开启群管插件", true);
             // 当前模块群对象
-            const group = getGroupFromCfg(aimGid, config);
-            const setting = group?.accessConfig.setting;
+            const groupConfig = getGroupConfig(aimGid, config);
+            const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的新词条
             const newTags = argMsg.split(" ").slice(1);
             // 成功添加的词条
@@ -85,12 +85,12 @@ export const setTagHandler: GroupEventHandler = (e, plugin, config, argMsg, para
             );
         } else {
             const aimGid = Number(group_id);
-            // 指定群聊对象
+            // 指定群组对象
             const aimGroup = plugin.bot?.pickGroup(aimGid);
-            if (!getGroupFromCfg(aimGid, config)) return e.reply("指定群聊尚未开启群管插件", true);
+            if (!getGroupConfig(aimGid, config)) return e.reply("指定群组尚未开启群管插件", true);
             // 当前模块群对象
-            const group = getGroupFromCfg(aimGid, config);
-            const setting = group?.accessConfig.setting;
+            const groupConfig = getGroupConfig(aimGid, config);
+            const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的老词条
             const oldTags = argMsg.split(" ");
             // 成功刪除的词条

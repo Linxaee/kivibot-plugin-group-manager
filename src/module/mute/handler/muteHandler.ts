@@ -7,7 +7,7 @@ import {
     validateNumber,
     formatSeconds,
     ifSelf,
-    getGroupFromCfg,
+    getGroupConfig,
 } from "../../../utils";
 import { randomInt } from "@kivibot/core";
 export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
@@ -15,7 +15,7 @@ export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, 
     const sender_id = e.sender.user_id;
     // 获取群对象
     const group = e.group;
-    const groupConfig = getGroupFromCfg(e, config);
+    const groupConfig = getGroupConfig(e, config);
     const { permissionList, enableAt } = groupConfig!.muteConfig;
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;

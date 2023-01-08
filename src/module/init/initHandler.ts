@@ -8,17 +8,17 @@ import { muteConfig } from "../mute/config";
 import { accessConfig } from "../access/config";
 
 /**
- * @description 当群聊第一次启用插件时，将该群加入插件群聊配置
+ * @description 当群组第一次启用插件时，将该群加入插件群组配置
  * @param plugin 插件实例
  * @param config 插件配置
  * @param gid 群id
  */
 export const initHandler = (plugin: KiviPlugin, config: GroupManagerConfig, gid: number) => {
-    // 若存在则存入
-    if (!config.groupConfigs.find(group => group.gid === gid)) {
+    config.enableGroups.push(gid);
+    // 若不存在则存入
+    if (!config.groupConfigs[gid]) {
         // 构造初始化对象
         const newGroup: GroupConfig = {
-            gid,
             cmdPrefix: "/",
             enableModules: Object.keys(moduleMap) as ModuleName[],
             muteAllConfig,
@@ -32,7 +32,7 @@ export const initHandler = (plugin: KiviPlugin, config: GroupManagerConfig, gid:
             tags: [],
             blackList: [],
         };
-        config.groupConfigs.push(newGroup);
+        config.groupConfigs[gid] = newGroup;
     }
     plugin.saveConfig(config);
 };

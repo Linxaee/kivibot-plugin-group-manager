@@ -9,7 +9,7 @@ export const moduleMap = {
 export const moduleKeyMap = {
     true: "是",
     false: "否",
-    enableGroups: "启用群聊",
+    enableGroups: "启用群组",
     gid: "群号",
     cmdPrefix: "指令前缀",
     enableModules: "启用模块",

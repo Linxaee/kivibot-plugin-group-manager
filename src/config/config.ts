@@ -1,43 +1,43 @@
 import type { GroupRole } from "@kivibot/core";
 import { ModuleName } from "../map";
 import { TitleConfig, AccessConfig } from "../module";
+import { ClusterList, ClustersConfig, GroupConfigs, GroupsCluster, TargetClusters } from "./types";
 export const roleList: GroupRole[] = ["admin", "owner", "member"];
 //@ts-ignore
 const { version } = require("../../package.json");
-console.log(version, typeof version);
 
 // 配置默认值
 export const config: GroupManagerConfig = {
     configVersion: version,
     enableGroups: [],
+    enableGroupsCluster: [],
+    groupConfigs: {},
+    groupsCluster: {},
     globalBlackList: [],
-    groupConfigs: [],
+    globalBlackListCluster: {},
+    globalSpecialCluster: {},
 };
 
 // 插件配置
 export interface GroupManagerConfig {
     // 配置版本
-    configVersion: number;
-    // 可用群聊
+    configVersion: string;
+    // 启用插件的群组
     enableGroups: number[];
-    groupConfigs: GroupConfig[];
+    // 启用集群的群组
+    enableGroupsCluster: number[];
+    // 启用普通群组的配置
+    groupConfigs: GroupConfigs;
+    // 启用集群的群组配置
+    groupsCluster: GroupsCluster;
     // 全局黑名单
     globalBlackList: number[];
+    // 全局集群黑名单
+    globalBlackListCluster: ClusterList;
+    // 全局集群白名单
+    globalSpecialCluster: ClusterList;
 }
 
-export interface GroupConfig {
-    // 群号
-    gid: number;
-    // 指令前缀
-    cmdPrefix: string;
-    // 启用的模块
-    enableModules: ModuleName[];
-    muteAllConfig: ModuleConfig;
-    muteConfig: ModuleConfig;
-    adminConfig: ModuleConfig;
-    titleConfig: TitleConfig;
-    accessConfig: AccessConfig;
-}
 // 模块基础配置
 export interface ModuleConfig {
     // 当前模块是否启用

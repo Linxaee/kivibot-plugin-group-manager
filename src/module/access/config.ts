@@ -15,7 +15,7 @@ export const accessConfig: AccessConfig = {
 export interface AccessConfig extends ModuleConfig {
     setting: AccessSetting;
 }
-// access模块启用群聊对象
+// access模块启用群组对象
 export interface AccessSetting {
     admins: number[];
     tags: string[];

@@ -1,13 +1,13 @@
 import type { GroupEventHandler } from "../../../module/types";
-import { getGroupFromCfg, handleAt, validateUid } from "../../../utils/index";
+import { getGroupConfig, handleAt, validateUid } from "../../../utils/index";
 export const setAdminHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
-    const group = getGroupFromCfg(e, config);
-    const setting = group?.accessConfig.setting;
-    const curGroup = plugin.bot?.pickGroup(group!.gid);
+    const groupConfig = getGroupConfig(e, config);
+    const setting = groupConfig?.accessConfig.setting;
+    const curGroup = plugin.bot?.pickGroup(e.group_id);
     // uid
     let uid: number | string | undefined = undefined;
     // 判断是否开启at功能
-    if (group?.accessConfig.enableAt) {
+    if (groupConfig?.accessConfig.enableAt) {
         uid = argMsg;
         // 若不合法则取用at解析出来的uid
         if (!validateUid(uid)) {

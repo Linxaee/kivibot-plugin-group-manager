@@ -1,10 +1,10 @@
 import type { GroupEventHandler } from "../../../module/types";
-import { getGroupFromCfg } from "../../../utils";
+import { getGroupConfig } from "../../../utils";
 export const getAdminHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     // 若查看本群分管
     if (!params) {
-        const group = getGroupFromCfg(e, config);
-        const setting = group?.accessConfig.setting;
+        const groupConfig = getGroupConfig(e, config);
+        const setting = groupConfig?.accessConfig.setting;
         const gid = e.group_id;
         const curGroup = plugin.bot?.pickGroup(gid);
         const admins = setting!.admins;
@@ -20,23 +20,26 @@ export const getAdminHandler: GroupEventHandler = (e, plugin, config, argMsg, pa
         return e.reply(msg, true);
     } else {
         // 若查看所有分管
-        let baseMsg = "该bot所在的所有开启群管功能的群聊有如下分管:\n";
-        const groups = config.groupConfigs;
-        groups.forEach((item, index) => {
-            const group = plugin.bot?.pickGroup(item.gid);
+        let baseMsg = "该bot所在的所有开启群管功能的群组有如下分管:\n";
+        const groupConfigs = config.groupConfigs;
+        const groupKeys = Object.keys(groupConfigs).map(key => Number(key));
+        groupKeys.forEach((key, index) => {
+            const groupConfig = groupConfigs[key];
+            const group = plugin.bot?.pickGroup(key);
             let adminMsg = "";
-            item.accessConfig.setting.admins.forEach((admin, index) => {
+            groupConfig.accessConfig.setting.admins.forEach((admin, index) => {
                 const member = group?.pickMember(admin);
                 adminMsg +=
-                    index === item.accessConfig.setting.admins.length - 1
+                    index === groupConfig.accessConfig.setting.admins.length - 1
                         ? `${member?.card}(${admin})`
                         : `${member?.card}(${admin})\n`;
             });
             let msg =
-                index === groups.length - 1
+                index === groupKeys.length - 1
                     ? `${index + 1}.${group?.name}(${group?.gid}):\n${adminMsg}`
                     : `${index + 1}.${group?.name}(${group?.gid}):\n${adminMsg}\n`;
             baseMsg += msg;
+            index++;
         });
         return e.reply(baseMsg, true);
     }

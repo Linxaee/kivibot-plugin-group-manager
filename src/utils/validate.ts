@@ -45,7 +45,7 @@ export const validateConfigVersion = (plugin: KiviPlugin, config: GroupManagerCo
         const admins = plugin.admins;
         admins.forEach(uid => {
             const msg = `💥检测到插件配置版本落后,现重新初始化插件配置。💥
-请重新再需要开启群管功能的群聊使用/gmc on开启功能
+请重新再需要开启群管功能的群组使用/gmc on开启功能
 带来不便，非常抱歉！`;
             plugin.bot?.sendPrivateMsg(uid, msg);
         });

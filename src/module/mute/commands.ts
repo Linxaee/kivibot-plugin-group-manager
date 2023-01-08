@@ -1,9 +1,9 @@
 import type { GroupEventHandler, commandInterceptor } from "../types";
 import { muteHandler } from "./handler/muteHandler";
 import { muteConfig } from "./config";
-import { getGroupFromCfg, getModuleCnName, getModuleEnable } from "../../utils";
+import { getGroupConfig, getModuleCnName, getModuleEnable } from "../../utils";
 export const muteCommands: commandInterceptor = (e, config, cmd) => {
-    const group = getGroupFromCfg(e, config);
+    const groupConfig = getGroupConfig(e, config);
     const map = new Map<string, GroupEventHandler>([
         [
             "禁",
@@ -19,7 +19,7 @@ export const muteCommands: commandInterceptor = (e, config, cmd) => {
         ],
     ]);
     // 若map中存在指令且没开启则回复
-    if (!getModuleEnable(group!, muteConfig.name) && map.has(cmd))
+    if (!getModuleEnable(groupConfig!, muteConfig.name) && map.has(cmd))
         return e.reply(`本群尚未启用${getModuleCnName(muteConfig)}模块`) as any;
     return map;
 };

@@ -3,7 +3,7 @@ import { config } from "./config";
 import { commandMap, adminCmdMap } from "./map";
 import { adminCmdHandler } from "./module/adminCmd";
 import { accessHandler } from "./module/access";
-import { deepMerge, getGroupFromCfg, validateConfigVersion } from "./utils";
+import { deepMerge, getGroupConfig, validateConfigVersion } from "./utils";
 //@ts-ignore
 const { version } = require("../package.json");
 
@@ -12,6 +12,7 @@ plugin.onMounted(bot => {
     // 检查配置版本是否小于1.3.5
     validateConfigVersion(plugin, config);
     plugin.saveConfig(deepMerge(config, plugin.loadConfig()));
+
     // 在命令前加上 /
     const botAdminGlobalCmd = Array.from(adminCmdMap.keys()).map(cmd => "/" + cmd);
     // 处理bot管理员配置指令
@@ -28,17 +29,16 @@ plugin.onMounted(bot => {
         const handler = adminCmdMap.get(cmd!);
         handler!(e, plugin, config, argMsg.split(" "));
     });
-    // 处理群聊消息;
+    // 处理群组消息;
     plugin.onGroupMessage(e => {
-        // 过滤未开启的群聊
+        // 过滤未开启的群组
         if (!config.enableGroups.includes(e.group_id)) {
             return;
         }
         const { raw_message } = e;
-        const group = getGroupFromCfg(e, config);
-
+        const groupConfig = getGroupConfig(e, config);
         // 匹配指令前缀、指令
-        const prefix = group!.cmdPrefix;
+        const prefix = groupConfig!.cmdPrefix;
         const passed = raw_message.trim().startsWith(prefix);
         // 前缀不为定义的前缀则不做处理
         if (!passed) return;
@@ -56,12 +56,12 @@ plugin.onMounted(bot => {
 
     // 处理加群申请
     plugin.on("request.group.add", e => {
-        // 从配置了自动审批的群聊中查找群聊对象
-        const group = getGroupFromCfg(e, config);
-        // 若未找到该群聊则不做处理
-        if (!group) return;
-        // 找到该群聊则交由handler处理
-        accessHandler(plugin, e, config, group.accessConfig.setting);
+        // 从配置了自动审批的群组中查找群组对象
+        const groupConfig = getGroupConfig(e, config);
+        // 若未找到该群组则不做处理
+        if (!groupConfig) return;
+        // 找到该群组则交由handler处理
+        accessHandler(plugin, e, config, groupConfig.accessConfig.setting);
     });
 });
 

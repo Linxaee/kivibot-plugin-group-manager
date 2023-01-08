@@ -1,11 +1,11 @@
 import type { GroupEventHandler } from "../../../module/types";
-import { selfNoAuthMsg, roleAuth, validateUid, handleAt, validateTitle, getGroupFromCfg } from "../../../utils";
+import { selfNoAuthMsg, roleAuth, validateUid, handleAt, validateTitle, getGroupConfig } from "../../../utils";
 export const titleHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
     // 消息发送人的uid
     const sender_id = e.sender.user_id;
     // 获取群对象
     const group = e.group;
-    const groupConfig = getGroupFromCfg(e, config);
+    const groupConfig = getGroupConfig(e, config);
     const { permissionList, enableAt } = groupConfig!.titleConfig;
 
     // 发送者若不在权限组中且不是bot管理员则返回
