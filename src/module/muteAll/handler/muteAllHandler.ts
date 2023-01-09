@@ -13,19 +13,11 @@ export const muteAllHandler: GroupEventHandler = (e, plugin, config, argMsg, par
     if (!roleAuth.selfIsGroupAdmin(group) && !roleAuth.selfIsGroupOwner(group)) return e.reply(selfNoAuthMsg);
     else {
         if (params) {
-            // 若已在群员禁言状态
-            if (group.all_muted) return e.reply("已在全员禁言状态,请勿重复开启");
-            else {
-                group.muteAll(true);
-                return e.reply("已开启全员禁言");
-            }
+            group.muteAll(true);
+            return e.reply("已开启全员禁言");
         } else {
-            // 若尚未开启全员禁言
-            if (!group.all_muted) return e.reply("尚未开启全员禁言,无需关闭");
-            else {
-                group.muteAll(false);
-                return e.reply("已关闭全员禁言");
-            }
+            group.muteAll(false);
+            return e.reply("已关闭全员禁言");
         }
     }
 };
