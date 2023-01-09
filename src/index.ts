@@ -3,6 +3,7 @@ import { config } from "./config";
 import { commandMap, adminCmdMap } from "./map";
 import { adminCmdHandler } from "./module/adminCmd";
 import { accessHandler } from "./module/access";
+import { clusterHandler } from "./module/cluster";
 import { deepMerge, getGroupConfig, validateConfigVersion } from "./utils";
 //@ts-ignore
 const { version } = require("../package.json");
@@ -61,7 +62,8 @@ plugin.onMounted(bot => {
         // 若未找到该群组则不做处理
         if (!groupConfig) return;
         // 找到该群组则交由handler处理
-        accessHandler(plugin, e, config, groupConfig.accessConfig.setting);
+        if (groupConfig.accessConfig.enableCluster) clusterHandler(plugin, e, config);
+        else accessHandler(plugin, e, config, groupConfig.accessConfig.setting);
     });
 });
 

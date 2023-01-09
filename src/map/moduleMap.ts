@@ -4,6 +4,7 @@ export const moduleMap = {
     admin: "设置管理员",
     title: "设置头衔",
     access: "自动审批",
+    // cluster: "集群",
 };
 
 export const moduleKeyMap = {

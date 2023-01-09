@@ -13,6 +13,8 @@ import { getGroupConfig, getModuleCnName, getModuleEnable } from "../../utils";
 // access模块普通指令
 export const accessCommands: commandInterceptor = (e, config, cmd) => {
     const groupConfig = getGroupConfig(e, config);
+    // 若开启集群则屏蔽
+
     const map = new Map<string, GroupEventHandler>([
         [
             "查看词条",
@@ -72,6 +74,8 @@ export const accessCommands: commandInterceptor = (e, config, cmd) => {
     // 若map中存在指令且没开启则回复
     if (!getModuleEnable(groupConfig!, accessConfig.name) && map.has(cmd))
         return e.reply(`本群尚未启用${getModuleCnName(accessConfig)}模块`) as any;
+    else if (groupConfig.accessConfig.enableCluster && map.has(cmd))
+        return e.reply(`本群已开启集群功能，请使用集群指令。`) as any;
     return map;
 };
 

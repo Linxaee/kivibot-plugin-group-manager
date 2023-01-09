@@ -2,7 +2,7 @@ import type { GroupRole } from "@kivibot/core";
 import type { BotAdminCmdHandler } from "../types";
 import type { ModuleConfig } from "../../config";
 import { roleList } from "../../config";
-import { initHandler } from "../init";
+import { initHandler, initClusterHandler } from "../init";
 import { transformModuleKey } from "../../map";
 import { getGroupConfig, getModuleCnName } from "../../utils";
 export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, param) => {
@@ -14,6 +14,15 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             return e.reply("请在群组中使用此指令", true);
         }
         const gid = e.group_id;
+        // 检测开启集群指令
+        if (key === "group") {
+            if (gid) {
+                initClusterHandler(plugin, config, gid, Number(value));
+                return e.reply("本群已开启集群功能", true);
+            }
+        }
+
+        // 启用
         if (gid) {
             if (!config.enableGroups.includes(gid)) {
                 // 初始化，将各个模块的开启群组列表加入当前群组
@@ -37,6 +46,7 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             return e.reply("本群已关闭群管功能", true);
         }
     }
+
     // 修改前缀
     if (module === "prefix") {
         if (e.message_type != "group") return e.reply("请在群组内使用", true);

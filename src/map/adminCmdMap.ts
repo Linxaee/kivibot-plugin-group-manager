@@ -1,4 +1,4 @@
 import type { BotAdminCmdHandler } from "../module";
-import { accessAdminCmd } from "../module";
+import { accessAdminCmd, clusterAdminCmd } from "../module";
 // bot管理员全局指令
-export const adminCmdMap = new Map<string, BotAdminCmdHandler>([...accessAdminCmd]);
+export const adminCmdMap = new Map<string, BotAdminCmdHandler>([...accessAdminCmd, ...clusterAdminCmd]);
