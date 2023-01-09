@@ -2,8 +2,5 @@ export * from "./deepMerge";
 export * from "./validate";
 export * from "./roleAuth";
 export * from "./formatSeconds";
-export * from "./convertObjMaps";
-export * from "./convertKeysToNumbers";
-export * from "./deserializeMap";
 export * from "./at";
 export * from "./utils";
