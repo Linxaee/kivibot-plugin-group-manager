@@ -5,4 +5,5 @@ export * from "./mute";
 export * from "./admin";
 export * from "./title";
 export * from "./access";
+export * from "./remove";
 export * from "./cluster";

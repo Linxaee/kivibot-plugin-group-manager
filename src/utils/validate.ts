@@ -1,5 +1,8 @@
 import { GroupManagerConfig } from "../config";
 import { KiviPlugin, PluginDataDir } from "@kivibot/core";
+import { getGroupConfig } from "./utils";
+import { ModuleName, moduleMap, moduleDefaultConfigMap } from "../map";
+
 //@ts-ignore
 const fs = require("fs");
 /**
@@ -50,4 +53,27 @@ export const validateConfigVersion = (plugin: KiviPlugin, config: GroupManagerCo
             plugin.bot?.sendPrivateMsg(uid, msg);
         });
     }
+};
+
+/**
+ * 遍历群配置，检查每一个群是否缺少模块配置
+ * @description 验证插件配置完整性，补全缺少的模块默认配置
+ * @param plugin 插件实例
+ * @param config 插件配置
+ * @returns
+ */
+export const validateIntegrality = (plugin: KiviPlugin, config: GroupManagerConfig) => {
+    const groupConfigs = config.groupConfigs;
+    const keys = Object.keys(groupConfigs);
+    const modules = Object.keys(moduleMap);
+    keys.forEach(key => {
+        const groupConfig = groupConfigs[Number(key)];
+        modules.forEach(moduleName => {
+            if (typeof groupConfig[`${moduleName as ModuleName}Config`] === "undefined") {
+                (groupConfig[`${moduleName as ModuleName}Config`] as any) =
+                    moduleDefaultConfigMap[`${moduleName as ModuleName}Config`];
+            }
+        });
+        plugin.saveConfig(config);
+    });
 };

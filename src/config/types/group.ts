@@ -17,4 +17,5 @@ export interface GroupConfig {
     adminConfig: ModuleConfig;
     titleConfig: TitleConfig;
     accessConfig: AccessConfig;
+    removeConfig: ModuleConfig;
 }

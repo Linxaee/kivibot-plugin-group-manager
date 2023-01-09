@@ -1,10 +1,26 @@
+import { muteAllConfig } from "../module/muteAll";
+import { adminConfig } from "../module/admin";
+import { titleConfig } from "../module/title";
+import { muteConfig } from "../module/mute";
+import { accessConfig } from "../module/access";
+import { removeConfig } from "../module/remove";
 export const moduleMap = {
     muteAll: "全员禁言",
     mute: "单独禁言",
     admin: "设置管理员",
     title: "设置头衔",
     access: "自动审批",
+    remove: "踢出群组",
     // cluster: "集群",
+};
+// 模块默认配置map
+export const moduleDefaultConfigMap = {
+    muteAllConfig,
+    muteConfig,
+    adminConfig,
+    titleConfig,
+    accessConfig,
+    removeConfig,
 };
 
 export const moduleKeyMap = {
@@ -28,6 +44,7 @@ export const moduleKeyMap = {
     adminConfig: "设置管理员模块(admin)",
     titleConfig: "设置头衔模块(title)",
     accessConfig: "自动审批模块(access)",
+    removeConfig: "踢出群组模块(remove)",
 };
 /**
  * @description 将转入的字符串中关键字替换
@@ -42,4 +59,5 @@ export const transformModuleKey = (str: string): string => {
     });
     return transformed;
 };
+
 export type ModuleName = keyof typeof moduleMap;
