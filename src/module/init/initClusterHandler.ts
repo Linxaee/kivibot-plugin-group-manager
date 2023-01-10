@@ -1,6 +1,7 @@
 import type { ClusterGroupConfig, GroupManagerConfig } from "../../config";
 import type { KiviPlugin } from "@kivibot/core";
 import { getGroupConfig } from "../../utils/utils";
+import { initHandler } from "./initHandler";
 
 /**
  * @description 当群组第一次启用集群时初始化该群集群配置
@@ -11,7 +12,14 @@ import { getGroupConfig } from "../../utils/utils";
  */
 export const initClusterHandler = (plugin: KiviPlugin, config: GroupManagerConfig, gid: number, cid: number) => {
     const clusterConfig = config.groupsCluster[cid];
-    const GroupConfig = getGroupConfig(gid, config);
+    let GroupConfig = getGroupConfig(gid, config);
+    // 若执行/gmc on group时，当前群组还未经过配置初始化
+    if (!GroupConfig) {
+        // 进行配置初始化
+        initHandler(plugin, config, gid);
+        // 以新配置覆盖当前群组配置
+        GroupConfig = getGroupConfig(gid, config);
+    }
     // 若不存在则存入
     if (clusterConfig && !clusterConfig.group[gid]) {
         // 开启普通access模块下的enableCluster，以拦截access模块指令的使用
