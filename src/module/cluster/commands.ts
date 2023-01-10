@@ -1,5 +1,5 @@
 import type { BotAdminCmdHandler, GroupEventHandler, commandInterceptor } from "../types";
-import { addClusterHandler } from "./handler";
+import { addClusterHandler,removeClusterHandler} from "./handler";
 import { getGroupConfig } from "../../utils";
 // cluster模块普通指令
 export const clusterCommands: commandInterceptor = (e, config, cmd) => {
@@ -18,4 +18,10 @@ export const clusterAdminCmd = new Map<string, BotAdminCmdHandler>([
             addClusterHandler(e as any, plugin, config, params.join(" "));
         },
     ],
+    [
+        "集群-",
+        (e, plugin, config, params) => {
+            removeClusterHandler(e as any, plugin, config, params.join(" "));
+        },
+    ]
 ]);
