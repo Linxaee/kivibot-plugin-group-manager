@@ -5,6 +5,7 @@ import { roleList } from "../../config";
 import { initHandler, initClusterHandler } from "../init";
 import { transformModuleKey } from "../../map";
 import { getGroupConfig, getModuleCnName } from "../../utils";
+import { validateNumber } from "../../utils/validate";
 export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, param) => {
     const [module, key, value] = param;
 
@@ -17,6 +18,21 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
         // 检测开启集群指令
         if (key === "group") {
             if (gid) {
+                const clusters = config.groupsCluster;
+                // 若只有group没有输入集群id则返回提示信息
+                if (!value) return e.reply("未指定集群id", true);
+                // 判断集群id是否合法
+                if (!validateNumber(value)) return e.reply(`请正确输入集群id`, true);
+                // 判断是否有该集群id
+                const keys = Object.keys(clusters);
+                if (!keys.includes(value))
+                    return e.reply(
+                        `不存在集群id为${value},当前后一个集群为 (${keys.length - 1})${
+                            clusters[keys.length - 1].label
+                        },请先添加新的集群`,
+                        true
+                    );
+                // 若判断均通过则初始化集群
                 initClusterHandler(plugin, config, gid, Number(value));
                 return e.reply("本群已开启集群功能", true);
             }

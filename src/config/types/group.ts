@@ -1,5 +1,5 @@
 import { ModuleName } from "../../map";
-import { AccessConfig, TitleConfig } from "../../module";
+import { AccessConfig, TitleConfig, MuteConfig } from "../../module";
 import { ModuleConfig } from "../config";
 
 export interface GroupConfigs {
@@ -13,7 +13,7 @@ export interface GroupConfig {
     // 启用的模块
     enableModules: ModuleName[];
     muteAllConfig: ModuleConfig;
-    muteConfig: ModuleConfig;
+    muteConfig: MuteConfig;
     adminConfig: ModuleConfig;
     titleConfig: TitleConfig;
     accessConfig: AccessConfig;

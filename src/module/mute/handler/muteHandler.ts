@@ -7,7 +7,7 @@ import {
     validateNumber,
     formatSeconds,
     ifSelf,
-    getGroupConfig,
+    getGroupConfig
 } from "../../../utils";
 import { randomInt } from "@kivibot/core";
 export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
@@ -16,7 +16,7 @@ export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, 
     // 获取群对象
     const group = e.group;
     const groupConfig = getGroupConfig(e, config);
-    const { permissionList, enableAt } = groupConfig!.muteConfig;
+    const { permissionList, enableAt, defaultTime } = groupConfig!.muteConfig;
     // 发送者若不在权限组中且不是bot管理员则返回
     if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // bot若不是管理员或群主则发送
@@ -45,8 +45,12 @@ export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, 
             try {
                 const member = group.pickMember(uid);
                 const nickname = member.info!.nickname;
+                // 若未指定time则执行默认时间
+                if (!time) time = defaultTime;
+                console.log(time);
+
                 // 若未指定time，则随机时间
-                if (!time) time = randomInt(1, 2592000);
+                if (["r", "R", "随机", "随", "random"].includes(time as string)) time = randomInt(1, 2592000);
                 else {
                     // 若指定了，则验证time是否为纯数字
                     if (!validateNumber(time) && params) {
@@ -64,7 +68,7 @@ export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, 
                     return e.reply(`已将${uid}(${nickname})禁言${formatSeconds(time)}`);
                 }
             } catch (err) {
-                return e.reply((err as Error).message);
+                return e.reply(`本群内找不到用户${uid},若此次指令是bot启动后第一条请重新发送一次指令`);
             }
         } else {
             return e.reply("请输入正确的uid哦~");

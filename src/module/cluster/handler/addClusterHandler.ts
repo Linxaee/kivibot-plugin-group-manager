@@ -15,12 +15,20 @@ export const addClusterHandler: GroupEventHandler = (e, plugin, config, argMsg) 
     // 获取此项键值应为多少
     const keys = Object.keys(groupsCluster);
     const nextKey = keys.length === 0 ? 1 : keys.length + 1;
+
+    // 验证label是否重复
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const cluster = groupsCluster[Number(key)];
+        if (cluster.label === label) return e.reply(`集群${label}已存在，请勿重复添加`);
+    }
+    
     // 构造新集群初始化对象
     const newCluster: ClustersConfig = {
         label,
         group: {},
         blackList: [],
-        specialList: [],
+        specialList: []
     };
     groupsCluster[nextKey] = newCluster;
     plugin.saveConfig(config);

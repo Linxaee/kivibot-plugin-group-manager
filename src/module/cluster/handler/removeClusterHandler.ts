@@ -1,4 +1,3 @@
-import { json } from "stream/consumers";
 import { ClustersConfig } from "../../../config";
 import { GroupEventHandler } from "../../types";
 /**
@@ -15,14 +14,13 @@ export const removeClusterHandler: GroupEventHandler = (e, plugin, config, argMs
     const groupsCluster = config.groupsCluster;
     // 看下集群是否在用
     const keys = Object.keys(groupsCluster[Number(ClusterID)].group);
-    const groupLength = keys.length
-    
-    if(groupLength > 0){
+    const groupLength = keys.length;
+
+    if (groupLength > 0) {
         return e.reply(`集群不为空，无法删除`);
-    }else{
-        delete groupsCluster[Number(ClusterID)]
+    } else {
+        delete groupsCluster[Number(ClusterID)];
         plugin.saveConfig(config);
         return e.reply(`集群删除成功`);
     }
-
 };

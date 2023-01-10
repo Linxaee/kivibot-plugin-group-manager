@@ -66,14 +66,32 @@ export const validateIntegrality = (plugin: KiviPlugin, config: GroupManagerConf
     const groupConfigs = config.groupConfigs;
     const keys = Object.keys(groupConfigs);
     const modules = Object.keys(moduleMap);
+
+    // 补全整个模块配置
     keys.forEach(key => {
+        // 取到每个群的config
         const groupConfig = groupConfigs[Number(key)];
+        // 遍历所有模块名，依次检查该群config中是否含有这些模块配置
         modules.forEach(moduleName => {
-            if (typeof groupConfig[`${moduleName as ModuleName}Config`] === "undefined") {
-                (groupConfig[`${moduleName as ModuleName}Config`] as any) =
+            // 模块配置
+            let moduleConfig = groupConfig[`${moduleName as ModuleName}Config`];
+            // 若模块配置不存在则缺失，进行补全
+            if (typeof moduleConfig === "undefined") {
+                (groupConfig as any)[`${moduleName as ModuleName}Config`] =
                     moduleDefaultConfigMap[`${moduleName as ModuleName}Config`];
+            } else {
+                const moduleKeys = Object.keys(moduleDefaultConfigMap[`${moduleName as ModuleName}Config`]);
+                moduleKeys.forEach(defaultKey => {
+                    // 检查模块配置属性是否存在
+                    let moduleProp = (moduleConfig as any)[defaultKey];
+                    if (typeof moduleProp === "undefined") {
+                        (moduleConfig as any)[defaultKey] = (moduleDefaultConfigMap as any)[`${moduleName}Config`][
+                            defaultKey
+                        ];
+                    }
+                });
             }
         });
-        plugin.saveConfig(config);
     });
+    plugin.saveConfig(config);
 };
