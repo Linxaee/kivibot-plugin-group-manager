@@ -47,7 +47,6 @@ export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, 
                 const nickname = member.info!.nickname;
                 // 若未指定time则执行默认时间
                 if (!time) time = defaultTime;
-                console.log(time);
 
                 // 若未指定time，则随机时间
                 if (["r", "R", "随机", "随", "random"].includes(time as string)) time = randomInt(1, 2592000);

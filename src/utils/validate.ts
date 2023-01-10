@@ -20,6 +20,7 @@ export const validateUid = (uid: number | string) => {
  * @param num 待验证数字
  */
 export const validateNumber = (num: number | string) => {
+    if (num === 0) return true;
     if (!num) return false;
     return !isNaN(Number(num));
 };

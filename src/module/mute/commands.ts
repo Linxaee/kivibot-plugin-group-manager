@@ -1,5 +1,5 @@
 import type { GroupEventHandler, commandInterceptor } from "../types";
-import { muteHandler } from "./handler/muteHandler";
+import { muteHandler, setTimeHandler } from "./handler";
 import { muteConfig } from "./config";
 import { getGroupConfig, getModuleCnName, getModuleEnable } from "../../utils";
 export const muteCommands: commandInterceptor = (e, config, cmd) => {
@@ -9,14 +9,20 @@ export const muteCommands: commandInterceptor = (e, config, cmd) => {
             "禁",
             (e, plugin, config, argMsg) => {
                 muteHandler(e, plugin, config, argMsg, true);
-            },
+            }
         ],
         [
             "解",
             (e, plugin, config, argMsg) => {
                 muteHandler(e, plugin, config, argMsg, false);
-            },
+            }
         ],
+        [
+            "默认时长",
+            (e, plugin, config, argMsg) => {
+                setTimeHandler(e, plugin, config, argMsg);
+            }
+        ]
     ]);
     // 若map中存在指令且没开启则回复
     if (!getModuleEnable(groupConfig!, muteConfig.name) && map.has(cmd))

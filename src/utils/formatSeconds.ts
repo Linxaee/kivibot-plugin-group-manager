@@ -8,13 +8,13 @@ export const formatSeconds = (seconds: number) => {
     let theTime1 = 0; // 分
     let theTime2 = 0; // 小时
     let theTime3 = 0; // 天
-    if (theTime > 60) {
+    if (theTime >= 60) {
         theTime1 = theTime / 60;
         theTime = theTime % 60;
-        if (theTime1 > 60) {
+        if (theTime1 >= 60) {
             theTime2 = theTime1 / 60;
             theTime1 = theTime1 % 60;
-            if (theTime2 > 24) {
+            if (theTime2 >= 24) {
                 //大于24小时
                 theTime3 = theTime2 / 24;
                 theTime2 = theTime2 % 24;
@@ -26,7 +26,7 @@ export const formatSeconds = (seconds: number) => {
         result = "" + Math.floor(theTime) + "秒";
     }
     if (theTime1 > 0) {
-        result = "" + Math.floor(theTime1) + "分" + result;
+        result = "" + Math.floor(theTime1) + "分钟" + result;
     }
     if (theTime2 > 0) {
         result = "" + Math.floor(theTime2) + "小时" + result;
