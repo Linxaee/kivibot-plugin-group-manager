@@ -2,8 +2,9 @@ export interface VersionDetails {
     [k: string]: string[];
 }
 export const versionDetails: VersionDetails = {
+    "1.3.8": ["修改指令 /踢 <qq号/@某人> 为 /踢 <qq号/@某人> <时间(h)/永久>", "禁言的默认时长修改为以分钟为单位"],
     "1.3.7": [
-        "修改指令 /gmc <qq号/@某人> 功能为 禁言目标默认时长(1h,可配置)",
+        "修改指令 /禁 <qq号/@某人> 功能为 禁言目标默认时长(1h,可配置)",
         "将随机禁言指令更改为 /禁 <qq号/@某人> <r/R/随>"
     ],
     "1.3.6": ["新增踢出功能", "future: 集群管理"],
