@@ -14,7 +14,11 @@ export const moduleMap = {
     // cluster: "集群",
 };
 // 模块默认配置map
-export const moduleDefaultConfigMap = {
+export const groupDefaultConfigMap = {
+    // 指令前缀
+    cmdPrefix: "/",
+    // 本群是否开启了版本更新内容提示
+    isEnableNewVer: true,
     muteAllConfig,
     muteConfig,
     adminConfig,
@@ -31,7 +35,6 @@ export const moduleKeyMap = {
     cmdPrefix: "指令前缀",
     enableModules: "启用模块",
     enable: "是否启用",
-    defaultTime: "默认禁言时间",
     At: "at功能",
     Self: "自行申请",
     name: "模块名",
@@ -40,6 +43,8 @@ export const moduleKeyMap = {
     admins: "分管",
     tags: "审批词",
     blackList: "黑名单",
+    defaultTime: "默认禁言时长(分钟)",
+    defaultBlockTime: "默认拉黑时长(分钟)",
     muteAllConfig: "全员禁言模块(muteAll)",
     muteConfig: "单独禁言模块(mute)",
     adminConfig: "设置管理员模块(admin)",

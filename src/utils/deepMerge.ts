@@ -6,6 +6,8 @@
  */
 export const deepMerge = (target: any, source: any) => {
     for (const key of Object.keys(source)) {
+        // 插件版本更新至最新
+        if (key === "configVersion") continue;
         if (source[key] instanceof Object && !Array.isArray(source[key])) {
             // 若目标对象中没有源对象的当前key,则向目标对象添加该key,并将空对象和源对象的value再进行递归合并
             if (!(key in target)) {
