@@ -63,8 +63,6 @@ export const validateConfigVersion = (
         // 若没发送过版本更新信息
         if (oldVersion !== newVersion) {
             let newConfig = deepMerge(config, plugin.loadConfig());
-            console.log(newConfig);
-
             const { bot } = plugin;
             let groups: number[] = config.enableGroups.concat(config.enableGroupsCluster);
             groups = [...new Set(groups)];
@@ -72,7 +70,6 @@ export const validateConfigVersion = (
                 const groupConfig = getGroupConfig(group, newConfig);
 
                 if (groupConfig.isEnableNewVer) {
-                    console.log(constructVersionMsg(newVersion, oldVersion));
                     bot?.sendGroupMsg(group, constructVersionMsg(newVersion, oldVersion));
                 }
             });
@@ -101,7 +98,6 @@ export const validateIntegrality = (plugin: KiviPlugin, config: GroupManagerConf
             const groupConfig = groupConfigs[Number(gid)];
             const configKeys = Object.keys(groupDefaultConfigMap);
             configKeys.forEach(configKey => {
-                // console.log(configKey);
                 // 遍历所有模块名，依次检查该群config中是否含有这些模块配置
                 if (configKey.indexOf("Config") != -1) {
                     // 模块配置
