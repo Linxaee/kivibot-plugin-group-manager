@@ -1,2 +1,2 @@
 export * from "./muteHandler";
-export * from "./setTimeHandler";
+export * from "./setMuteTimeHandler";

@@ -1,7 +1,7 @@
 import type { GroupConfig, GroupManagerConfig } from "../../config";
 import { moduleMap, ModuleName } from "../../map";
 import { KiviPlugin } from "@kivibot/core";
-import { moduleDefaultConfigMap } from "../../map";
+import { groupDefaultConfigMap } from "../../map";
 /**
  * @description 当群组第一次启用插件时，将该群加入插件群组配置
  * @param plugin 插件实例
@@ -14,14 +14,13 @@ export const initHandler = (plugin: KiviPlugin, config: GroupManagerConfig, gid:
     if (!config.groupConfigs[gid]) {
         // 构造初始化对象
         const newGroup: GroupConfig = {
-            cmdPrefix: "/",
             enableModules: Object.keys(moduleMap) as ModuleName[],
-            ...moduleDefaultConfigMap,
+            ...groupDefaultConfigMap
         };
         newGroup.accessConfig.setting = {
             admins: [...plugin.admins],
             tags: [],
-            blackList: [],
+            blackList: []
         };
         config.groupConfigs[gid] = newGroup;
     }

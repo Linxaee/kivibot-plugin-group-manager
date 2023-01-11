@@ -9,8 +9,9 @@ export const accessConfig: AccessConfig = {
     setting: {
         admins: [],
         tags: [],
-        blackList: [],
+        blackList: []
     },
+    tempBlackList: {}
 };
 // access模块配置
 export interface AccessConfig extends ModuleConfig {
@@ -18,6 +19,8 @@ export interface AccessConfig extends ModuleConfig {
     enableCluster: boolean;
     // 配置项
     setting: AccessSetting;
+    // 群临时黑名单
+    tempBlackList: TempBlackList;
 }
 // 群组配置项
 export interface AccessSetting {
@@ -27,4 +30,14 @@ export interface AccessSetting {
     tags: string[];
     // 群黑名单
     blackList: number[];
+}
+// 临时黑名单
+export interface TempBlockMember {
+    // 上一次记录(被踢出、退群、拉黑)的时间
+    lastRecordTime: number;
+    // 持续时间
+    duration: number;
+}
+export interface TempBlackList {
+    [k: number]: TempBlockMember;
 }

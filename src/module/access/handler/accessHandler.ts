@@ -1,7 +1,10 @@
 import type { AccessHandler } from "../../types";
 import { GroupRequestEvent, KiviPlugin } from "@kivibot/core";
+import { getGroupConfig } from "../../../utils/utils";
+import { formatSeconds } from "../../../utils";
 export const accessHandler: AccessHandler = (plugin, e, config, group) => {
     const { globalBlackList } = config;
+    const { tempBlackList } = getGroupConfig(e, config).accessConfig;
     // 获取uid,gid,申请消息
     const { user_id, group_id, comment } = e;
     // 获取黑名单,分管员,审批关键词
@@ -11,6 +14,27 @@ export const accessHandler: AccessHandler = (plugin, e, config, group) => {
         // 拒绝并发送消息
         sendToAdmins(plugin, group_id, admins, constructMsg(e, "该用户在全局黑名单中", false));
         return e.approve(false);
+    }
+    // 若申请人在临时黑名单中
+    if (tempBlackList[user_id]) {
+        // 判断是否已到期
+        const temp = tempBlackList[user_id];
+        const interval = temp.duration * 60 * 60 - (Date.now() - temp.lastRecordTime) / 1000;
+        // 若>=0说明还未到期
+        if (interval >= 0) {
+            // 拒绝并发送消息
+            sendToAdmins(
+                plugin,
+                group_id,
+                admins,
+                constructMsg(
+                    e,
+                    `该用户在临时黑名单中,还有${formatSeconds(Number(Math.floor(interval).toFixed(0)))}才解禁`,
+                    false
+                )
+            );
+            return e.approve(false);
+        }
     }
     if (blackList.includes(user_id)) {
         // 拒绝并发送消息

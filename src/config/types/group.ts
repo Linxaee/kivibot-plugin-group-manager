@@ -1,5 +1,5 @@
 import { ModuleName } from "../../map";
-import { AccessConfig, TitleConfig, MuteConfig } from "../../module";
+import { AccessConfig, TitleConfig, MuteConfig, RemoveConfig } from "../../module";
 import { ModuleConfig } from "../config";
 
 export interface GroupConfigs {
@@ -10,6 +10,8 @@ export interface GroupConfigs {
 export interface GroupConfig {
     // 指令前缀
     cmdPrefix: string;
+    // 本群是否开启了版本更新内容提示
+    isEnableNewVer: boolean;
     // 启用的模块
     enableModules: ModuleName[];
     muteAllConfig: ModuleConfig;
@@ -17,5 +19,5 @@ export interface GroupConfig {
     adminConfig: ModuleConfig;
     titleConfig: TitleConfig;
     accessConfig: AccessConfig;
-    removeConfig: ModuleConfig;
+    removeConfig: RemoveConfig;
 }

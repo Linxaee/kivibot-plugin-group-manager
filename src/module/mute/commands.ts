@@ -1,5 +1,5 @@
 import type { GroupEventHandler, commandInterceptor } from "../types";
-import { muteHandler, setTimeHandler } from "./handler";
+import { muteHandler, setMuteTimeHandler } from "./handler";
 import { muteConfig } from "./config";
 import { getGroupConfig, getModuleCnName, getModuleEnable } from "../../utils";
 export const muteCommands: commandInterceptor = (e, config, cmd) => {
@@ -18,9 +18,9 @@ export const muteCommands: commandInterceptor = (e, config, cmd) => {
             }
         ],
         [
-            "默认时长",
+            "默认禁言",
             (e, plugin, config, argMsg) => {
-                setTimeHandler(e, plugin, config, argMsg);
+                setMuteTimeHandler(e, plugin, config, argMsg);
             }
         ]
     ]);
