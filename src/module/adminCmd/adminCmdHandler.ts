@@ -18,7 +18,7 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
         // 检测开启集群指令
         if (key === "group") {
             if (gid) {
-                const clusters = config.groupsCluster;
+                const clusters = config.groupCluster;
                 // 判断是否有集群
                 const keys = Object.keys(clusters);
                 if (keys.length === 0) return e.reply("尚未添加任何集群，请添加后再以集群模式启动", true);
