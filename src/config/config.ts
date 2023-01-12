@@ -1,5 +1,5 @@
 import type { GroupRole } from "@kivibot/core";
-import type { GroupConfigs, GroupsCluster } from "./types";
+import type { GroupConfigs, groupCluster } from "./types";
 import { ModuleName } from "../map";
 
 export const roleList: GroupRole[] = ["admin", "owner", "member"];
@@ -10,9 +10,9 @@ const { version } = require("../../package.json");
 export const config: GroupManagerConfig = {
     configVersion: version,
     enableGroups: [],
-    enableGroupsCluster: [],
+    enableGroupCluster: [],
     groupConfigs: {},
-    groupsCluster: {},
+    groupCluster: {},
     globalBlackList: [],
 };
 
@@ -23,11 +23,11 @@ export interface GroupManagerConfig {
     // 启用插件的群组
     enableGroups: number[];
     // 启用集群的群组
-    enableGroupsCluster: number[];
+    enableGroupCluster: number[];
     // 启用普通群组的配置
     groupConfigs: GroupConfigs;
     // 集群对象
-    groupsCluster: GroupsCluster;
+    groupCluster: groupCluster;
     // 全局黑名单
     globalBlackList: number[];
 }

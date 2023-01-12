@@ -11,7 +11,7 @@ import { initHandler } from "./initHandler";
  * @param cid 集群id
  */
 export const initClusterHandler = (plugin: KiviPlugin, config: GroupManagerConfig, gid: number, cid: number) => {
-    const clusterConfig = config.groupsCluster[cid];
+    const clusterConfig = config.groupCluster[cid];
 
     let GroupConfig = getGroupConfig(gid, config);
     // 若执行/gmc on group时，当前群组还未经过配置初始化
@@ -35,7 +35,7 @@ export const initClusterHandler = (plugin: KiviPlugin, config: GroupManagerConfi
         };
         clusterConfig.group[gid] = newGroup;
         // 将群号推入启用集群的群数组中
-        config.enableGroupsCluster.push(gid);
+        config.enablegroupCluster.push(gid);
     }
     plugin.saveConfig(config);
 };

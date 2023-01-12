@@ -26,7 +26,7 @@ export interface ClusterGroupConfig {
 }
 // 应用目标集群
 
-export interface GroupsCluster {
+export interface groupCluster {
     [k: number]: ClustersConfig;
 }
 export interface GroupList {

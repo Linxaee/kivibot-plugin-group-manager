@@ -11,15 +11,15 @@ export const removeClusterHandler: GroupEventHandler = (e, plugin, config, argMs
      * @argMsg 集群id
      */
     const ClusterID = argMsg.split(" ")[0];
-    const groupsCluster = config.groupsCluster;
+    const groupCluster = config.groupCluster;
     // 看下集群是否在用
-    const keys = Object.keys(groupsCluster[Number(ClusterID)].group);
+    const keys = Object.keys(groupCluster[Number(ClusterID)].group);
     const groupLength = keys.length;
 
     if (groupLength > 0) {
         return e.reply(`集群不为空，无法删除`);
     } else {
-        delete groupsCluster[Number(ClusterID)];
+        delete groupCluster[Number(ClusterID)];
         plugin.saveConfig(config);
         return e.reply(`集群删除成功`);
     }

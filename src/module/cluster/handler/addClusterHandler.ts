@@ -11,15 +11,15 @@ export const addClusterHandler: GroupEventHandler = (e, plugin, config, argMsg) 
      * @todo 验证label是否重复
      */
     const label = argMsg.split(" ")[0];
-    const groupsCluster = config.groupsCluster;
+    const groupCluster = config.groupCluster;
     // 获取此项键值应为多少
-    const keys = Object.keys(groupsCluster);
+    const keys = Object.keys(groupCluster);
     const nextKey = keys.length === 0 ? 1 : keys.length + 1;
 
     // 验证label是否重复
     for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        const cluster = groupsCluster[Number(key)];
+        const cluster = groupCluster[Number(key)];
         if (cluster.label === label) return e.reply(`集群${label}已存在，请勿重复添加`);
     }
     
@@ -30,7 +30,7 @@ export const addClusterHandler: GroupEventHandler = (e, plugin, config, argMsg) 
         blackList: [],
         specialList: []
     };
-    groupsCluster[nextKey] = newCluster;
+    groupCluster[nextKey] = newCluster;
     plugin.saveConfig(config);
     return e.reply(`集群${label}添加成功`);
 };

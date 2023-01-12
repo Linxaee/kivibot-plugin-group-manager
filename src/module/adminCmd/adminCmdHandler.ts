@@ -18,7 +18,7 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
         // 检测开启集群指令
         if (key === "group") {
             if (gid) {
-                const clusters = config.groupsCluster;
+                const clusters = config.groupCluster;
                 // 若只有group没有输入集群id则返回提示信息
                 if (!value) return e.reply("未指定集群id", true);
                 // 判断集群id是否合法
