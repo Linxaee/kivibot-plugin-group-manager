@@ -2,6 +2,7 @@ export interface VersionDetails {
     [k: string]: string[];
 }
 export const versionDetails: VersionDetails = {
+    "1.3.9": ["将更新消息限制到仅管理员"],
     "1.3.8": [
         "修改指令 /踢 <qq号/@某人> 为 /踢 <qq号/@某人> <时间(h)/永久>",
         "修改指令 /默认时间 <时长(分钟为单位)> 为 /默认禁言 <时长(分钟为单位)>",

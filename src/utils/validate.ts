@@ -62,16 +62,10 @@ export const validateConfigVersion = (
         }
         // 若没发送过版本更新信息
         if (oldVersion !== newVersion) {
-            let newConfig = deepMerge(config, plugin.loadConfig());
             const { bot } = plugin;
-            let groups: number[] = config.enableGroups.concat(config.enableGroupsCluster);
-            groups = [...new Set(groups)];
-            groups.forEach(group => {
-                const groupConfig = getGroupConfig(group, newConfig);
-
-                if (groupConfig.isEnableNewVer) {
-                    bot?.sendGroupMsg(group, constructVersionMsg(newVersion, oldVersion));
-                }
+            const admins = plugin.admins;
+            admins.forEach(uid => {
+                bot?.sendPrivateMsg(uid, constructVersionMsg(newVersion, oldVersion));
             });
         }
     } catch {

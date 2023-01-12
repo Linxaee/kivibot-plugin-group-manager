@@ -10,8 +10,6 @@ export interface GroupConfigs {
 export interface GroupConfig {
     // 指令前缀
     cmdPrefix: string;
-    // 本群是否开启了版本更新内容提示
-    isEnableNewVer: boolean;
     // 启用的模块
     enableModules: ModuleName[];
     muteAllConfig: ModuleConfig;

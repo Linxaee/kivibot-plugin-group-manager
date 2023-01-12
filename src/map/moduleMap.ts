@@ -17,8 +17,6 @@ export const moduleMap = {
 export const groupDefaultConfigMap = {
     // 指令前缀
     cmdPrefix: "/",
-    // 本群是否开启了版本更新内容提示
-    isEnableNewVer: true,
     muteAllConfig,
     muteConfig,
     adminConfig,
