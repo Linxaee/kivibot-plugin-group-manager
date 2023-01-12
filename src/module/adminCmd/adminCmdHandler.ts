@@ -26,7 +26,7 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
                 if (!value && Number(value) != 0) return e.reply("未指定集群id", true);
                 // 判断集群id是否合法
                 if (!validateNumber(value)) return e.reply(`请正确输入集群id`, true);
-                if (!keys.includes(value))
+                if (!keys.includes(String(value)))
                     return e.reply(
                         `不存在集群id为${value}，当前最后一个集群为 (${keys.length})${
                             clusters[`${keys.length}`].label

@@ -118,6 +118,9 @@ export const validateIntegrality = (plugin: KiviPlugin, config: GroupManagerConf
                 }
             });
         });
+        if ((config as any)["enableGroupsCluster"]) delete (config as any)["enableGroupsCluster"];
+        if ((config as any)["groupsCluster"]) delete (config as any)["groupsCluster"];
+
         plugin.saveConfig(config);
     } catch {
         plugin.throwPluginError("group-manager: 未通过配置完整性验证");

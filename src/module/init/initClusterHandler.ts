@@ -35,7 +35,7 @@ export const initClusterHandler = (plugin: KiviPlugin, config: GroupManagerConfi
         };
         clusterConfig.group[gid] = newGroup;
         // 将群号推入启用集群的群数组中
-        config.enablegroupCluster.push(gid);
+        config.enableGroupCluster.push(gid);
     }
     plugin.saveConfig(config);
 };
