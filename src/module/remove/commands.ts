@@ -1,5 +1,5 @@
 import type { GroupEventHandler, commandInterceptor } from "../types";
-import { removeHandler } from "./handler/removeHandler";
+import { removeHandler, setRemoveTimeHandler } from "./handler";
 import { removeConfig } from "./config";
 import { getGroupConfig, getModuleCnName, getModuleEnable } from "../../utils";
 // admin模块普通指令
@@ -9,15 +9,15 @@ export const removeCommands: commandInterceptor = (e, config, cmd) => {
         [
             "踢",
             (e, plugin, config, argMsg) => {
-                removeHandler(e, plugin, config, argMsg, true);
-            },
+                removeHandler(e, plugin, config, argMsg);
+            }
         ],
         [
-            "黑",
+            "默认拉黑",
             (e, plugin, config, argMsg) => {
-                removeHandler(e, plugin, config, argMsg, false);
-            },
-        ],
+                setRemoveTimeHandler(e, plugin, config, argMsg);
+            }
+        ]
     ]);
     // 若map中存在指令且没开启则回复
     if (!getModuleEnable(groupConfig!, removeConfig.name) && map.has(cmd))

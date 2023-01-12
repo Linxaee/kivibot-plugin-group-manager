@@ -4,17 +4,13 @@ import { commandMap, adminCmdMap } from "./map";
 import { adminCmdHandler } from "./module/adminCmd";
 import { accessHandler } from "./module/access";
 import { clusterHandler } from "./module/cluster";
-import { deepMerge, getGroupConfig, validateConfigVersion, validateIntegrality } from "./utils";
+import { getGroupConfig, validatePluginConfig } from "./utils";
 //@ts-ignore
 const { version } = require("../package.json");
 
 const plugin = new KiviPlugin("group-manager", version);
 plugin.onMounted(bot => {
-    // 检查配置版本是否小于1.3.5
-    validateConfigVersion(plugin, config);
-    plugin.saveConfig(deepMerge(config, plugin.loadConfig()));
-    // 验证配置完整性
-    validateIntegrality(plugin, config);
+    validatePluginConfig(version, plugin, config);
     // 在命令前加上 /
     const botAdminGlobalCmd = Array.from(adminCmdMap.keys()).map(cmd => "/" + cmd);
     // 处理bot管理员配置指令

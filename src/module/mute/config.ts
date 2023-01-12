@@ -5,9 +5,10 @@ export const muteConfig: MuteConfig = {
     name: "mute",
     permissionList: ["owner", "admin"],
     enableAt: true,
-    defaultTime: 3600
+    defaultTime: 60
 };
 
 export interface MuteConfig extends ModuleConfig {
+    // 默认禁言时间，以分钟为单位
     defaultTime: number;
 }

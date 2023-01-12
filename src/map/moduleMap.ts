@@ -10,17 +10,19 @@ export const moduleMap = {
     admin: "设置管理员",
     title: "设置头衔",
     access: "自动审批",
-    remove: "踢出群组",
+    remove: "踢出群组"
     // cluster: "集群",
 };
 // 模块默认配置map
-export const moduleDefaultConfigMap = {
+export const groupDefaultConfigMap = {
+    // 指令前缀
+    cmdPrefix: "/",
     muteAllConfig,
     muteConfig,
     adminConfig,
     titleConfig,
     accessConfig,
-    removeConfig,
+    removeConfig
 };
 
 export const moduleKeyMap = {
@@ -39,12 +41,14 @@ export const moduleKeyMap = {
     admins: "分管",
     tags: "审批词",
     blackList: "黑名单",
+    defaultTime: "默认禁言时长(分钟)",
+    defaultBlockTime: "默认拉黑时长(分钟)",
     muteAllConfig: "全员禁言模块(muteAll)",
     muteConfig: "单独禁言模块(mute)",
     adminConfig: "设置管理员模块(admin)",
     titleConfig: "设置头衔模块(title)",
     accessConfig: "自动审批模块(access)",
-    removeConfig: "踢出群组模块(remove)",
+    removeConfig: "踢出群组模块(remove)"
 };
 /**
  * @description 将转入的字符串中关键字替换

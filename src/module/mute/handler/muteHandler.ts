@@ -45,18 +45,19 @@ export const muteHandler: GroupEventHandler = async (e, plugin, config, argMsg, 
             try {
                 const member = group.pickMember(uid);
                 const nickname = member.info!.nickname;
-                // 若未指定time则执行默认时间
-                if (!time) time = defaultTime;
-                console.log(time);
-
-                // 若未指定time，则随机时间
-                if (["r", "R", "随机", "随", "random"].includes(time as string)) time = randomInt(1, 2592000);
+                // 若未指定time则执行默认时间，以分钟为单位，乘60
+                if (!time) time = defaultTime * 60;
                 else {
-                    // 若指定了，则验证time是否为纯数字
-                    if (!validateNumber(time) && params) {
-                        return e.reply(`请填入正确的禁言时间哦`);
-                    } else time = Number(time) > 2592000 ? 2592000 : Number(time);
+                    // 则随机时间
+                    if (["r", "R", "随机", "随", "random"].includes(time as string)) time = randomInt(1, 2592000);
+                    else {
+                        // 若指定了，则验证time是否为纯数字
+                        if (!validateNumber(time) && params) {
+                            return e.reply(`请填入正确的禁言时间哦`);
+                        } else time = Number(time) > 2592000 ? 2592000 : Number(time) * 60;
+                    }
                 }
+
                 // 判断是禁还是解禁
                 // 若param为false则直接解禁
                 if (!params || time === 0) {

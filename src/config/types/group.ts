@@ -1,5 +1,5 @@
 import { ModuleName } from "../../map";
-import { AccessConfig, TitleConfig, MuteConfig } from "../../module";
+import { AccessConfig, TitleConfig, MuteConfig, RemoveConfig } from "../../module";
 import { ModuleConfig } from "../config";
 
 export interface GroupConfigs {
@@ -17,5 +17,5 @@ export interface GroupConfig {
     adminConfig: ModuleConfig;
     titleConfig: TitleConfig;
     accessConfig: AccessConfig;
-    removeConfig: ModuleConfig;
+    removeConfig: RemoveConfig;
 }
