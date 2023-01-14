@@ -17,6 +17,7 @@ export const moduleMap = {
 export const groupDefaultConfigMap = {
     // 指令前缀
     cmdPrefix: "/",
+    enableModules: Object.keys(moduleMap) as ModuleName[],
     muteAllConfig,
     muteConfig,
     adminConfig,

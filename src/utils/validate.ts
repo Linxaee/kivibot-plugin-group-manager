@@ -84,40 +84,26 @@ export const validateConfigVersion = (
  */
 export const validateIntegrality = (plugin: KiviPlugin, config: GroupManagerConfig) => {
     try {
+        function checkConfigCompleteness(config: any, defaultConfig: any) {
+            for (const [key, value] of Object.entries(defaultConfig)) {
+                if (typeof config[key] === "undefined") {
+                    config[key] = value;
+                } else if (typeof value === "object") {
+                    checkConfigCompleteness(config[key], value);
+                }
+            }
+        }
+
         const groupConfigs = config.groupConfigs;
         const gids = Object.keys(groupConfigs);
-        // 补全整个模块配置
+
         gids.forEach(gid => {
-            // 取到每个群的config
             const groupConfig = groupConfigs[Number(gid)];
-            const configKeys = Object.keys(groupDefaultConfigMap);
-            configKeys.forEach(configKey => {
-                // 遍历所有模块名，依次检查该群config中是否含有这些模块配置
-                if (configKey.indexOf("Config") != -1) {
-                    // 模块配置
-                    let moduleConfig = (groupConfig as any)[configKey];
-                    // 若模块配置不存在则缺失，进行补全
-                    if (typeof moduleConfig === "undefined") {
-                        (groupConfig as any)[configKey] = (groupDefaultConfigMap as any)[configKey];
-                    } else {
-                        const moduleKeys = Object.keys((groupDefaultConfigMap as any)[configKey]);
-                        moduleKeys.forEach(defaultKey => {
-                            // 检查模块配置属性是否存在
-                            let moduleProp = (moduleConfig as any)[defaultKey];
-                            if (typeof moduleProp === "undefined") {
-                                (moduleConfig as any)[defaultKey] = (groupDefaultConfigMap as any)[configKey][
-                                    defaultKey
-                                ];
-                            }
-                        });
-                    }
-                } else {
-                    if (typeof (groupConfig as any)[configKey] === "undefined") {
-                        (groupConfig as any)[configKey] = (groupDefaultConfigMap as any)[configKey];
-                    }
-                }
-            });
+            checkConfigCompleteness(groupConfig, groupDefaultConfigMap);
         });
+
+        checkConfigCompleteness(config, groupDefaultConfigMap);
+
         if ((config as any)["enableGroupsCluster"]) delete (config as any)["enableGroupsCluster"];
         if ((config as any)["groupsCluster"]) delete (config as any)["groupsCluster"];
 
