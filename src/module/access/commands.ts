@@ -6,6 +6,7 @@ import {
     setTagHandler,
     blackListHandler,
     getBlacklistHandler,
+    setRefuseMsgHandler
 } from "./handler";
 import { accessConfig } from "./config";
 import { getGroupConfig, getModuleCnName, getModuleEnable } from "../../utils";
@@ -20,56 +21,62 @@ export const accessCommands: commandInterceptor = (e, config, cmd) => {
             "查看词条",
             (e, plugin, config, argMsg) => {
                 getTagHandler(e, plugin, config, argMsg, false);
-            },
+            }
         ],
         [
             "词条+",
             (e, plugin, config, argMsg) => {
                 setTagHandler(e, plugin, config, argMsg, { scope: "group", handle: "add" });
-            },
+            }
         ],
         [
             "词条-",
             (e, plugin, config, argMsg) => {
                 setTagHandler(e, plugin, config, argMsg, { scope: "group", handle: "remove" });
-            },
+            }
         ],
         [
             "黑+",
             (e, plugin, config, argMsg) => {
                 blackListHandler(e, plugin, config, argMsg, { scope: "group", handle: "add" });
-            },
+            }
         ],
         [
             "黑-",
             (e, plugin, config, argMsg) => {
                 blackListHandler(e, plugin, config, argMsg, { scope: "group", handle: "remove" });
-            },
+            }
         ],
         [
             "分管+",
             (e, plugin, config, argMsg) => {
                 setAdminHandler(e, plugin, config, argMsg, true);
-            },
+            }
         ],
         [
             "分管-",
             (e, plugin, config, argMsg) => {
                 setAdminHandler(e, plugin, config, argMsg, false);
-            },
+            }
         ],
         [
             "查看分管",
             (e, plugin, config, argMsg) => {
                 getAdminHandler(e, plugin, config, argMsg, false);
-            },
+            }
         ],
         [
             "查看黑名单",
             (e, plugin, config, argMsg) => {
                 getBlacklistHandler(e, plugin, config, argMsg, false);
-            },
+            }
         ],
+        [
+            "拒绝理由",
+            (e, plugin, config, argMsg) => {
+                setRefuseMsgHandler(e, plugin, config, argMsg, false);
+            }
+        ]
     ]);
     // 若map中存在指令且没开启则回复
     if (!getModuleEnable(groupConfig!, accessConfig.name) && map.has(cmd))
@@ -85,42 +92,42 @@ export const accessAdminCmd = new Map<string, BotAdminCmdHandler>([
         "所有词条",
         (e, plugin, config, params) => {
             getTagHandler(e as any, plugin, config, params.join(" "), true);
-        },
+        }
     ],
     [
         "指定词条+",
         (e, plugin, config, params) => {
             setTagHandler(e as any, plugin, config, params.join(" "), { scope: "global", handle: "add" });
-        },
+        }
     ],
     [
         "指定词条-",
         (e, plugin, config, params) => {
             setTagHandler(e as any, plugin, config, params.join(" "), { scope: "global", handle: "remove" });
-        },
+        }
     ],
     [
         "所有分管",
         (e, plugin, config, params) => {
             getAdminHandler(e as any, plugin, config, params.join(" "), true);
-        },
+        }
     ],
     [
         "所有黑名单",
         (e, plugin, config, params) => {
             getBlacklistHandler(e as any, plugin, config, params.join(" "), true);
-        },
+        }
     ],
     [
         "全局黑+",
         (e, plugin, config, params) => {
             blackListHandler(e as any, plugin, config, params.join(" "), { scope: "global", handle: "add" });
-        },
+        }
     ],
     [
         "全局黑-",
         (e, plugin, config, params) => {
             blackListHandler(e as any, plugin, config, params.join(" "), { scope: "global", handle: "remove" });
-        },
-    ],
+        }
+    ]
 ]);

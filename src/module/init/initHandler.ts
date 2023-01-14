@@ -14,13 +14,13 @@ export const initHandler = (plugin: KiviPlugin, config: GroupManagerConfig, gid:
     if (!config.groupConfigs[gid]) {
         // 构造初始化对象
         const newGroup: GroupConfig = {
-            enableModules: Object.keys(moduleMap) as ModuleName[],
             ...groupDefaultConfigMap
         };
         newGroup.accessConfig.setting = {
             admins: [...plugin.admins],
             tags: [],
-            blackList: []
+            blackList: [],
+            refuseMsg: "您已被本群拉黑，请勿重复申请"
         };
         config.groupConfigs[gid] = newGroup;
     }

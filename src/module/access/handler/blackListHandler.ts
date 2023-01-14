@@ -1,26 +1,39 @@
 import type { GroupEventHandler } from "../../../module/types";
-import { getGroupConfig, validateNumber } from "../../../utils";
+import { getGroupConfig, handleAt, validateNumber } from "../../../utils";
 import { validateUid } from "../../../utils/validate";
 // 查看词条处理函数,支持群词条和所有词条
 export const blackListHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
     const { scope, handle } = params;
     // 若是设置当前群词条
     if (scope === "group") {
+        const groupConfig = getGroupConfig(e, config);
+        const { enableAt } = groupConfig!.removeConfig;
+        const group = e.group;
         // 处理添加操作
         if (handle === "add") {
             const groupConfig = getGroupConfig(e, config);
             const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的新uid
             const newUid = argMsg.split(" ");
-            // 成功添加的词条
+            // 成功添加的成员信息
             const success: string[] = [];
+            // 成功添加的成员uid
+            const successUid: number[] = [];
             // 未查找到的数组
             let missCount = 0;
             let missMsg = `\n有以下qq号不存在该用户:`;
             for (let i = 0; i < newUid.length; i++) {
-                const uid = newUid[i];
+                let uid: number | string | undefined = undefined;
+                uid = newUid[i];
+                if (enableAt) {
+                    // 判断指令中第三个参数是否是合法uid
+                    // 若不合法则采用at解析出来的uid
+                    if (!validateUid(uid)) {
+                        uid = handleAt(e);
+                    }
+                }
                 // 检查uid是否合法
-                if (!validateUid(uid)) continue;
+                if (!validateUid(uid!)) continue;
                 if (!setting?.blackList.includes(Number(uid))) {
                     // 检查user是否存在
                     try {
@@ -29,11 +42,17 @@ export const blackListHandler: GroupEventHandler = async (e, plugin, config, arg
                         const info = await user.getSimpleInfo();
                         setting?.blackList.push(Number(uid));
                         success.push(`${info.nickname}(${info.user_id})`);
+                        successUid.push(info.user_id);
                     } catch (err) {
                         missCount++;
                         missMsg += `${uid}、`;
                     }
                 }
+            }
+
+            // 踢出全部拉黑成员
+            for (const uid of successUid) {
+                group.kickMember(uid);
             }
             plugin.saveConfig(config);
 
@@ -98,6 +117,7 @@ export const blackListHandler: GroupEventHandler = async (e, plugin, config, arg
                     }
                 }
             }
+
             plugin.saveConfig(config);
 
             if (success.length === 0) return e.reply("本次添加没有新增新全局黑名单成员，", true);

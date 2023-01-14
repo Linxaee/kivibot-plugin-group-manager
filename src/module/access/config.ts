@@ -9,7 +9,8 @@ export const accessConfig: AccessConfig = {
     setting: {
         admins: [],
         tags: [],
-        blackList: []
+        blackList: [],
+        refuseMsg: "您已被本群拉黑，请勿重复申请"
     },
     tempBlackList: {}
 };
@@ -30,6 +31,8 @@ export interface AccessSetting {
     tags: string[];
     // 群黑名单
     blackList: number[];
+    // 黑名单内默认拒绝信息
+    refuseMsg: string;
 }
 // 临时黑名单
 export interface TempBlockMember {

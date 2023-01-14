@@ -2,6 +2,7 @@ export interface VersionDetails {
     [k: string]: string[];
 }
 export const versionDetails: VersionDetails = {
+    "1.4.0": ["新增自定义默认群黑名单拒绝理由", "新增因关键词、临时拉黑被拒绝入群时的拒绝理由"],
     "1.3.9": ["将更新消息限制到仅管理员"],
     "1.3.8": [
         "修改指令 /踢 <qq号/@某人> 为 /踢 <qq号/@某人> <时间(h)/永久>",
