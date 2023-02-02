@@ -138,7 +138,6 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             if (!value || !validateNumber(value)) return e.reply("请输入正确的群id", true);
             else {
                 const gid = Number(value);
-                console.log(gid);
 
                 groupConfig = getGroupConfig(gid, config);
             }
@@ -168,7 +167,6 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             if (!value || !validateNumber(value)) return e.reply("请输入正确的群id", true);
             else {
                 const gid = Number(value);
-                console.log(gid);
 
                 groupConfig = getGroupConfig(gid, config);
             }
@@ -198,7 +196,6 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             if (!value || !validateNumber(value)) return e.reply("请输入正确的群id", true);
             else {
                 const gid = Number(value);
-                console.log(gid);
 
                 groupConfig = getGroupConfig(gid, config);
             }
@@ -228,7 +225,6 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             if (!value || !validateNumber(value)) return e.reply("请输入正确的群id", true);
             else {
                 const gid = Number(value);
-                console.log(gid);
 
                 groupConfig = getGroupConfig(gid, config);
             }
@@ -257,7 +253,6 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             if (!args || !validateNumber(args)) return e.reply("请输入正确的群id", true);
             else {
                 const gid = Number(args);
-                console.log(gid);
 
                 groupConfig = getGroupConfig(gid, config);
             }
@@ -292,7 +287,6 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             if (!args || !validateNumber(args)) return e.reply("请输入正确的群id", true);
             else {
                 const gid = Number(args);
-                console.log(gid);
 
                 groupConfig = getGroupConfig(gid, config);
             }
@@ -328,7 +322,6 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             if (!args || !validateNumber(args)) return e.reply("请输入正确的群id", true);
             else {
                 const gid = Number(args);
-                console.log(gid);
 
                 groupConfig = getGroupConfig(gid, config);
             }
