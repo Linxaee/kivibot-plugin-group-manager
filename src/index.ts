@@ -24,6 +24,7 @@ plugin.onMounted(bot => {
         const [cmd, argMsg] = [temp.shift(), temp.join(" ")];
 
         if (!adminCmdMap.has(cmd!)) return;
+
         const handler = adminCmdMap.get(cmd!);
         handler!(e, plugin, config, argMsg.split(" "));
     });

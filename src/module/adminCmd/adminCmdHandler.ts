@@ -7,12 +7,21 @@ import { transformModuleKey } from "../../map";
 import { getGroupConfig, getModuleCnName } from "../../utils";
 import { validateNumber } from "../../utils/validate";
 export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, param) => {
-    const [module, key, value] = param;
+    const [module, key, value, args] = param;
 
     // 开启插件
     if (module === "on") {
         if (e.message_type != "group") {
-            return e.reply("请在群组中使用此指令", true);
+            // 处理私聊
+            if (!key || !validateNumber(key)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(key);
+                if (!config.enableGroups.includes(gid)) {
+                    // 初始化，将各个模块的开启群组列表加入当前群组
+                    initHandler(plugin, config, gid);
+                }
+                return e.reply(`群聊 ${gid} 已开启群管功能`, true);
+            }
         }
         const gid = e.group_id;
         // 检测开启集群指令
@@ -52,7 +61,17 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     // 关闭插件
     if (module === "off") {
         if (e.message_type != "group") {
-            return e.reply("请在群组中使用此指令", true);
+            // 处理私聊
+            if (!key || !validateNumber(key)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(key);
+                if (config.enableGroups.includes(gid)) {
+                    const idx = config.enableGroups.findIndex(e => e === gid);
+                    config.enableGroups.splice(idx, 1);
+                    plugin.saveConfig(config);
+                }
+                return e.reply(`群聊 ${gid} 已关闭群管功能`, true);
+            }
         }
         const gid = e.group_id;
         if (gid) {
@@ -66,8 +85,19 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
 
     // 修改前缀
-    if (module === "prefix") {
-        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+    if (module === "prefix" && key) {
+        if (e.message_type != "group") {
+            // 处理私聊
+            if (!value || !validateNumber(value)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(value);
+                const groupConfig = getGroupConfig(gid, config);
+                if (!groupConfig) return e.reply(`群 ${gid} 尚未开启群管插件`, true);
+                groupConfig.cmdPrefix = key;
+                plugin.saveConfig(config);
+                return e.reply(`已修改群 ${gid} 功能触发前缀为: '${key}'`, true);
+            }
+        }
         const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
         groupConfig.cmdPrefix = key;
@@ -76,7 +106,21 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 查看本群详情
     if (module === "dt") {
-        if (e.message_type != "group") return e.reply("请在群组内使用", true);
+        if (e.message_type != "group") {
+            // 处理私聊
+            if (!key || !validateNumber(key)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(key);
+                const groupConfig = getGroupConfig(gid, config);
+                if (!groupConfig) return e.reply(`群 ${gid} 尚未开启群管插件`, true);
+                return e.reply(
+                    `群 ${gid} 的详细配置为:\n${transformModuleKey(
+                        JSON.stringify(groupConfig, null, "\t")
+                    )}\n字段具体含义请自行查阅插件官网说明文档:\nhttps://github.com/Linxaee/kivibot-plugin-group-manager/blob/master/README.md`,
+                    true
+                );
+            }
+        }
         const groupConfig = getGroupConfig(e, config);
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
         return e.reply(
@@ -88,8 +132,19 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 开启模块
     if (module && key === "on") {
-        if (e.message_type != "group") return e.reply("请在群组内使用", true);
-        const groupConfig = getGroupConfig(e, config);
+        let groupConfig = null;
+        if (e.message_type != "group") {
+            // 处理私聊
+            if (!value || !validateNumber(value)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(value);
+                console.log(gid);
+
+                groupConfig = getGroupConfig(gid, config);
+            }
+        } else {
+            groupConfig = getGroupConfig(e, config);
+        }
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块
@@ -107,8 +162,19 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
 
     // 关闭模块
     if (module && key === "off") {
-        if (e.message_type != "group") return e.reply("请在群组内使用", true);
-        const groupConfig = getGroupConfig(e, config);
+        let groupConfig = null;
+        if (e.message_type != "group") {
+            // 处理私聊
+            if (!value || !validateNumber(value)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(value);
+                console.log(gid);
+
+                groupConfig = getGroupConfig(gid, config);
+            }
+        } else {
+            groupConfig = getGroupConfig(e, config);
+        }
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块
@@ -126,8 +192,19 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
 
     // 模块配置查看
     if (module && key === "dt") {
-        if (e.message_type != "group") return e.reply("请在群组内使用", true);
-        const groupConfig = getGroupConfig(e, config);
+        let groupConfig = null;
+        if (e.message_type != "group") {
+            // 处理私聊
+            if (!value || !validateNumber(value)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(value);
+                console.log(gid);
+
+                groupConfig = getGroupConfig(gid, config);
+            }
+        } else {
+            groupConfig = getGroupConfig(e, config);
+        }
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块的权限组
@@ -145,8 +222,19 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 模块权限组查看
     if (module && key === "list") {
-        if (e.message_type != "group") return e.reply("请在群组内使用", true);
-        const groupConfig = getGroupConfig(e, config);
+        let groupConfig = null;
+        if (e.message_type != "group") {
+            // 处理私聊
+            if (!value || !validateNumber(value)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(value);
+                console.log(gid);
+
+                groupConfig = getGroupConfig(gid, config);
+            }
+        } else {
+            groupConfig = getGroupConfig(e, config);
+        }
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块的权限组
@@ -163,8 +251,19 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 模块权限组添加
     if (module && key === "+" && value) {
-        if (e.message_type != "group") return e.reply("请在群组内使用", true);
-        const groupConfig = getGroupConfig(e, config);
+        let groupConfig = null;
+        if (e.message_type != "group") {
+            // 处理私聊
+            if (!args || !validateNumber(args)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(args);
+                console.log(gid);
+
+                groupConfig = getGroupConfig(gid, config);
+            }
+        } else {
+            groupConfig = getGroupConfig(e, config);
+        }
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块的权限组
@@ -187,8 +286,19 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
     }
     // 模块权限组删除
     if (module && key === "-" && value) {
-        if (e.message_type != "group") return e.reply("请在群组内使用", true);
-        const groupConfig = getGroupConfig(e, config);
+        let groupConfig = null;
+        if (e.message_type != "group") {
+            // 处理私聊
+            if (!args || !validateNumber(args)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(args);
+                console.log(gid);
+
+                groupConfig = getGroupConfig(gid, config);
+            }
+        } else {
+            groupConfig = getGroupConfig(e, config);
+        }
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块的权限组
@@ -210,11 +320,21 @@ export const adminCmdHandler: BotAdminCmdHandler = async (e, plugin, config, par
             return e.reply(`不存在模块${module},请检查输入`, true);
         }
     }
-
     // 启用at功能
     if (module && key === "at" && value) {
-        if (e.message_type != "group") return e.reply("请在群组内使用", true);
-        const groupConfig = getGroupConfig(e, config);
+        let groupConfig = null;
+        if (e.message_type != "group") {
+            // 处理私聊
+            if (!args || !validateNumber(args)) return e.reply("请输入正确的群id", true);
+            else {
+                const gid = Number(args);
+                console.log(gid);
+
+                groupConfig = getGroupConfig(gid, config);
+            }
+        } else {
+            groupConfig = getGroupConfig(e, config);
+        }
         if (!groupConfig) return e.reply("本群尚未开启群管插件", true);
 
         // 获取对应模块

@@ -1,8 +1,15 @@
 import type { GroupEventHandler } from "../../../module/types";
-import { getGroupConfig, handleAt, validateNumber } from "../../../utils";
+import { getGroupConfig, handleAt, roleAuth, validateNumber } from "../../../utils";
 import { validateUid } from "../../../utils/validate";
 // 查看词条处理函数,支持群词条和所有词条
 export const blackListHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
+    // 消息发送人的uid
+    const sender_id = e.sender.user_id;
+    const groupConfig = getGroupConfig(e, config);
+    const { permissionList } = groupConfig!.accessConfig;
+    // 发送者若不在权限组中且不是bot管理员则返回
+    if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
+
     const { scope, handle } = params;
     // 若是设置当前群词条
     if (scope === "group") {

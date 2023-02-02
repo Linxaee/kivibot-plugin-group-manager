@@ -1,9 +1,14 @@
 import type { GroupEventHandler } from "../../../module/types";
-import { getGroupConfig, handleAt, validateUid } from "../../../utils/index";
+import { getGroupConfig, handleAt, roleAuth, validateUid } from "../../../utils/index";
 export const setAdminHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     const groupConfig = getGroupConfig(e, config);
     const setting = groupConfig?.accessConfig.setting;
     const curGroup = plugin.bot?.pickGroup(e.group_id);
+    // 消息发送人的uid
+    const sender_id = e.sender.user_id;
+    const { permissionList } = groupConfig!.accessConfig;
+    // 发送者若不在权限组中且不是bot管理员则返回
+    if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
     // uid
     let uid: number | string | undefined = undefined;
     // 判断是否开启at功能

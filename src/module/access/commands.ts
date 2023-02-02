@@ -15,7 +15,7 @@ import { getGroupConfig, getModuleCnName, getModuleEnable } from "../../utils";
 export const accessCommands: commandInterceptor = (e, config, cmd) => {
     const groupConfig = getGroupConfig(e, config);
     // 若开启集群则屏蔽
-
+    // 发送者若不在权限组中且不是bot管理员则返回
     const map = new Map<string, GroupEventHandler>([
         [
             "查看词条",

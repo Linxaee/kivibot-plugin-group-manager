@@ -1,6 +1,17 @@
 import type { GroupEventHandler } from "../../types";
-import { getGroupConfig } from "../../../utils";
+import { getGroupConfig, roleAuth } from "../../../utils";
 export const getBlacklistHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
+    const sender_id = e.sender.user_id;
+    if (e.message_type === "group") {
+        // 消息发送人的uid
+        const groupConfig = getGroupConfig(e, config);
+        const { permissionList } = groupConfig!.accessConfig;
+        // 发送者若不在权限组中且不是bot管理员则返回
+        if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
+    } else {
+        // 发送者若不是bot管理员则返回
+        if (!roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
+    }
     // 若查看本群黑名单
     if (!params) {
         const groupConfig = getGroupConfig(e, config);
