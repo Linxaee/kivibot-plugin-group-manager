@@ -1,6 +1,7 @@
 import type { GroupEventHandler } from "../../types";
 import { getGroupConfig, roleAuth } from "../../../utils";
 export const setRefuseMsgHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
+    
     const refuseMsg = argMsg;
     // 消息发送人的uid
     const sender_id = e.sender.user_id;

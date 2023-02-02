@@ -2,6 +2,7 @@ export interface VersionDetails {
     [k: string]: string[];
 }
 export const versionDetails: VersionDetails = {
+    "1.4.2": ["access模块基本指令支持私聊"],
     "1.4.1": ["bot管理员指令支持私聊并指定群号", "所有词条/分管/黑名单 指令支持私聊", "修复部分模块权限错误"],
     "1.4.0": ["新增自定义默认群黑名单拒绝理由", "新增因关键词、临时拉黑被拒绝入群时的拒绝理由"],
     "1.3.9": ["将更新消息限制到仅管理员"],

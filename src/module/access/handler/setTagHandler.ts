@@ -3,20 +3,27 @@ import { getGroupConfig, roleAuth, validateNumber } from "../../../utils";
 // 查看词条处理函数,支持群词条和所有词条
 export const setTagHandler: GroupEventHandler = (e, plugin, config, argMsg, params) => {
     const { scope, handle } = params;
-    // 消息发送人的uid
     const sender_id = e.sender.user_id;
-    const groupConfig = getGroupConfig(e, config);
-    const { permissionList } = groupConfig!.accessConfig;
-    // 发送者若不在权限组中且不是bot管理员则返回
-    if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
-
+    let groupConfig = getGroupConfig(e, config);
+    // 消息发送人的uid
+    if (e.message_type === "group") {
+        const { permissionList } = groupConfig!.accessConfig;
+        // 发送者若不在权限组中且不是bot管理员则返回
+        if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
+    } else {
+        // 发送者若不在权限组中且不是bot管理员则返回
+        if (!roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
+    }
     // 若是设置当前群词条
     if (scope === "group") {
         // 处理添加操作
         if (handle === "add") {
             const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的新词条
-            const newTags = argMsg.split(" ");
+            // const newTags = argMsg.split(" ");
+            let newTags = undefined;
+            if (e.recall === null) newTags = argMsg.split(" ").slice(0, -1);
+            else newTags = argMsg.split(" ");
             // 成功添加的词条
             const successTag: string[] = [];
             // tag长度是否过长

@@ -13,7 +13,7 @@ export const setAdminHandler: GroupEventHandler = (e, plugin, config, argMsg, pa
     let uid: number | string | undefined = undefined;
     // 判断是否开启at功能
     if (groupConfig?.accessConfig.enableAt) {
-        uid = argMsg;
+        uid = argMsg.split(" ")[0];
         // 若不合法则取用at解析出来的uid
         if (!validateUid(uid)) {
             uid = handleAt(e);

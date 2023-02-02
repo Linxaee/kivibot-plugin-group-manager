@@ -2,9 +2,10 @@ import { KiviPlugin, segment, makeForwardMsg, GroupMessageEvent } from "@kivibot
 import { config } from "./config";
 import { commandMap, adminCmdMap } from "./map";
 import { adminCmdHandler } from "./module/adminCmd";
-import { accessHandler } from "./module/access";
+import { accessHandler, rawMap, accessCommands, accessConfig } from "./module/access";
 import { clusterHandler } from "./module/cluster";
-import { getGroupConfig, validatePluginConfig } from "./utils";
+import { getGroupConfig, getModuleCnName, getModuleEnable, roleAuth, validatePluginConfig } from "./utils";
+import { validateNumber } from "./utils/validate";
 //@ts-ignore
 const { version } = require("../package.json");
 
@@ -53,7 +54,36 @@ plugin.onMounted(bot => {
         const handler = map.get(cmd!);
         handler!(e, plugin, config, argMsg);
     });
+    // access专属
+    plugin.onPrivateMessage(e => {
+        const { raw_message } = e;
+        // 匹配指令前缀、指令
+        const passed = raw_message.trim().startsWith("/");
+        // 前缀不为定义的前缀则不做处理
+        if (!passed) return;
+        const temp = raw_message.slice(1).split(" ");
+        const [cmd, argMsg] = [temp.shift(), temp.join(" ")];
+        if (!rawMap.has(cmd!)) return;
 
+        let gid: string | undefined | number = argMsg.split(" ").pop();
+        if (gid && !validateNumber(gid)) e.reply("请输入正确群号");
+        gid = Number(gid);
+        if (!roleAuth.senderIsBotAdmin(plugin, e.sender.user_id)) return e.reply(`私聊配置仅支持bot管理员使用`);
+        // 过滤未开启的群组
+        if (!config.enableGroups.includes(gid)) {
+            return e.reply(`群聊 ${gid} 尚未启用群管插件`);
+        }
+        const groupConfig = getGroupConfig(gid, config);
+        if (!getModuleEnable(groupConfig!, "access"))
+            return e.reply(`本群尚未启用${getModuleCnName(accessConfig)}模块`) as any;
+
+        const handler = rawMap.get(cmd!);
+        (e as any).group_id = gid;
+        (e as any).group = bot.pickGroup(gid);
+        (e as any).member = null;
+        (e as any).recall = null;
+        handler!(e as unknown as GroupMessageEvent, plugin, config, argMsg);
+    });
     // 处理加群申请
     plugin.on("request.group.add", e => {
         // 从配置了自动审批的群组中查找群组对象

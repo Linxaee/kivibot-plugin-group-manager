@@ -3,13 +3,6 @@ import { getGroupConfig, handleAt, roleAuth, validateNumber } from "../../../uti
 import { validateUid } from "../../../utils/validate";
 // 查看词条处理函数,支持群词条和所有词条
 export const blackListHandler: GroupEventHandler = async (e, plugin, config, argMsg, params) => {
-    // 消息发送人的uid
-    const sender_id = e.sender.user_id;
-    const groupConfig = getGroupConfig(e, config);
-    const { permissionList } = groupConfig!.accessConfig;
-    // 发送者若不在权限组中且不是bot管理员则返回
-    if (!permissionList?.includes(e.sender.role) && !roleAuth.senderIsBotAdmin(plugin, sender_id)) return;
-
     const { scope, handle } = params;
     // 若是设置当前群词条
     if (scope === "group") {
@@ -21,7 +14,9 @@ export const blackListHandler: GroupEventHandler = async (e, plugin, config, arg
             const groupConfig = getGroupConfig(e, config);
             const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的新uid
-            const newUid = argMsg.split(" ");
+            let newUid = undefined;
+            if (e.recall === null) newUid = argMsg.split(" ").slice(0, -1);
+            else newUid = argMsg.split(" ");
             // 成功添加的成员信息
             const success: string[] = [];
             // 成功添加的成员uid
@@ -75,7 +70,11 @@ export const blackListHandler: GroupEventHandler = async (e, plugin, config, arg
             const groupConfig = getGroupConfig(e, config);
             const setting = groupConfig?.accessConfig.setting;
             // 获取参数中的新uid
-            const oldUid = argMsg.split(" ");
+            // const oldUid = argMsg.split(" ");
+            // 获取参数中的新uid
+            let oldUid = undefined;
+            if (e.recall === null) oldUid = argMsg.split(" ").slice(0, -1);
+            else oldUid = argMsg.split(" ");
             // 成功添加的词条
             const successUid: string[] = [];
             for (let i = 0; i < oldUid.length; i++) {

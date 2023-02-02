@@ -131,3 +131,66 @@ export const accessAdminCmd = new Map<string, BotAdminCmdHandler>([
         }
     ]
 ]);
+
+export const rawMap = new Map<string, GroupEventHandler>([
+    [
+        "查看词条",
+        (e, plugin, config, argMsg) => {
+            getTagHandler(e, plugin, config, argMsg, false);
+        }
+    ],
+    [
+        "词条+",
+        (e, plugin, config, argMsg) => {
+            setTagHandler(e, plugin, config, argMsg, { scope: "group", handle: "add" });
+        }
+    ],
+    [
+        "词条-",
+        (e, plugin, config, argMsg) => {
+            setTagHandler(e, plugin, config, argMsg, { scope: "group", handle: "remove" });
+        }
+    ],
+    [
+        "黑+",
+        (e, plugin, config, argMsg) => {
+            blackListHandler(e, plugin, config, argMsg, { scope: "group", handle: "add" });
+        }
+    ],
+    [
+        "黑-",
+        (e, plugin, config, argMsg) => {
+            blackListHandler(e, plugin, config, argMsg, { scope: "group", handle: "remove" });
+        }
+    ],
+    [
+        "分管+",
+        (e, plugin, config, argMsg) => {
+            setAdminHandler(e, plugin, config, argMsg, true);
+        }
+    ],
+    [
+        "分管-",
+        (e, plugin, config, argMsg) => {
+            setAdminHandler(e, plugin, config, argMsg, false);
+        }
+    ],
+    [
+        "查看分管",
+        (e, plugin, config, argMsg) => {
+            getAdminHandler(e, plugin, config, argMsg, false);
+        }
+    ],
+    [
+        "查看黑名单",
+        (e, plugin, config, argMsg) => {
+            getBlacklistHandler(e, plugin, config, argMsg, false);
+        }
+    ],
+    [
+        "拒绝理由",
+        (e, plugin, config, argMsg) => {
+            setRefuseMsgHandler(e, plugin, config, argMsg, false);
+        }
+    ]
+]);
